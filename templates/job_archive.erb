@@ -1,0 +1,14 @@
+  ##
+  # Archives
+  #
+  
+  archive :<%= scope.lookupvar('name') %> do |archive|
+<%  if scope.lookupvar('path').is_a? Array -%>
+<%    scope.lookupvar('path').each do |path| -%>
+    archive.add "<%= path %>"
+<%    end -%>
+<%  else -%>      
+    archive.add "<%= scope.lookupvar('path') %>"
+<%  end -%>
+  end
+

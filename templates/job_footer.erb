@@ -1,0 +1,53 @@
+  ##
+  # Amazon Simple Storage Service [Storage]
+  #
+  store_with S3 do |s3|
+    s3.path              = "<%= scope.lookupvar('::fqdn')%>"
+<% if ( scope.lookupvar('keep').to_i > 0 ) -%>
+    s3.keep              = <%= scope.lookupvar('keep') %>
+<% end -%>
+  end
+
+  ##
+  # Bzip2 [Compressor]
+  #
+  compress_with Bzip2 do |compression|
+    compression.level = 9
+  end
+
+<% if scope.lookupvar('backups::enable_mail') -%>
+  ##
+  # Mail [Notifier]
+  #
+  notify_by Mail do |mail|
+    mail.on_success           = <%= scope.lookupvar('backups::mail_success') %>
+    mail.on_warning           = <%= scope.lookupvar('backups::mail_warning') %>
+    mail.on_failure           = <%= scope.lookupvar('backups::mail_failure') %>
+
+    mail.from                 = '<%= scope.lookupvar('backups::mail_from') %>'
+    mail.to                   = '<%= scope.lookupvar('backups::mail_to') %>'
+    mail.address              = '<%= scope.lookupvar('backups::mail_address') %>'
+    mail.port                 = <%= scope.lookupvar('backups::mail_port') %>
+    mail.domain               = '<%= scope.lookupvar('backups::mail_domain') %>'
+  end
+<% end -%>
+
+<% if scope.lookupvar('backups::enable_hc') -%>
+  ##
+  # HipChat [Notifier]
+  #
+  notify_by Hipchat do |hipchat|
+    hipchat.on_success = <%= scope.lookupvar('backups::hc_success') %>
+    hipchat.on_warning = <%= scope.lookupvar('backups::hc_warning') %>
+    hipchat.on_failure = <%= scope.lookupvar('backups::hc_failure') %>
+
+    hipchat.success_color = 'green'
+    hipchat.warning_color = 'yellow'
+    hipchat.failure_color = 'red'
+
+    hipchat.token = '<%= scope.lookupvar('backups::hc_token') %>'
+    hipchat.from = '<%= scope.lookupvar('backups::hc_from') %>'
+    hipchat.rooms_notified = '<%= scope.lookupvar('backups::hc_notify') %>' 
+  end
+<% end -%>
+end

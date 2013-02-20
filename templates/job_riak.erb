@@ -1,0 +1,56 @@
+  ##
+  # Riak config
+  #
+  
+  archive :riak_config do |archive|
+  <% if scope.lookupvar('mode') == 'dev' -%>
+    archive.add "/var/lib/riak/dev1/etc"
+    archive.add "/var/lib/riak/dev2/etc"
+    archive.add "/var/lib/riak/dev3/etc"
+    archive.add "/var/lib/riak/dev4/etc"
+  <% else -%>
+    archive.add "/etc/riak"
+  <% end -%>
+  end
+
+  ##
+  # Riak [Database]
+  #
+  <% if scope.lookupvar('mode') == 'dev' -%>
+  database Riak do |db|
+    db.name   = "dev1"
+    db.node   = "dev1@<%= scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/var/lib/riak/dev1/bin/riak-admin'
+    db.user = 'riak1'
+  end
+  database Riak do |db|
+    db.name   = "dev2"
+    db.node   = "dev2@<%= scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/var/lib/riak/dev2/bin/riak-admin'
+    db.user = 'riak2'
+  end
+  database Riak do |db|
+    db.name   = "dev3"
+    db.node   = "dev3@<%= scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/var/lib/riak/dev3/bin/riak-admin'
+    db.user = 'riak3'
+  end
+  database Riak do |db|
+    db.name   = "dev4"
+    db.node   = "dev4@<%= scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/var/lib/riak/dev4/bin/riak-admin'
+    db.user = 'riak4'
+  end
+  <% else -%>
+  database Riak do |db|
+    db.name   = "riak"
+    db.node   = "riak@<% scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/usr/sbin/riak-admin'
+  end
+
+  <% end -%>
