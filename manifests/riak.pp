@@ -48,12 +48,10 @@ define backups::riak (
   $hour,
   $minute,
   $mode,
-  $keep = 0,
-  $enable = true,
+  $keep     = 0,
+  $enable   = true,
   $tmp_path = '/tmp',
 ){
-
-  include backups
 
   $ensure = $enable ? {
     true    => 'present',
@@ -83,12 +81,19 @@ define backups::riak (
       content => template('backups/job_footer.erb'),
       order   => 99;
   }
-  
-  $cron_ensure = $::disposition ? {
-    'vagrant' => absent,
-    default   => present
+
+  case $::disposition {
+    'vagrant':  {
+      $cron_ensure = 'absent'
+    }
+    default  :  {
+      $cron_ensure = $enable ? {
+        true    => 'present',
+        default => 'absent',
+      }
+    }
   }
-  
+
   $tmp = $tmp_path ? {
     ''      => '',
     default => "--tmp-path $tmp_path"

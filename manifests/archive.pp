@@ -45,8 +45,6 @@ define backups::archive(
   $tmp_path = '/tmp',
 ){
 
-  include backups
-
   concat {
     "/etc/backup/models/${name}.rb":
       owner => root,
