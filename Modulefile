@@ -1,5 +1,5 @@
 name 'evenup-backups'
-version '0.10.5'
+version '1.0.0'
 author 'Justin Lambert <jlambert@letsevenup.com>'
 license 'Apache'
 project_page 'http://www.letsevenup.com'
