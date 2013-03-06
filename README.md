@@ -11,7 +11,11 @@ Usage:
 
 To install:
 <pre>
-  include backups
+  class { 'backups': 
+    aws_access_key  = 'real_aws_access_key,
+    aws_secret_key  = 'real_aws_secret_key',
+    bucket          = 'mybucket',
+  }
 </pre>
 
 To backup the /opt/myapp/logs and /var/log/ directories at 4:25 every day:
