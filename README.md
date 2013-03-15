@@ -43,3 +43,5 @@ Contribute:
 * Improve/fix (with spec tests)
 * Push new topic branch
 * Submit a PR
+* Enjoy your awesome contribution
+
