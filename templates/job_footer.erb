@@ -24,8 +24,8 @@
     mail.on_warning           = <%= scope.lookupvar('backups::mail_warning') %>
     mail.on_failure           = <%= scope.lookupvar('backups::mail_failure') %>
 
-    mail.from                 = '<%= scope.lookupvar('backups::mail_from') %>'
-    mail.to                   = '<%= scope.lookupvar('backups::mail_to') %>'
+    mail.from                 = '<%= scope.lookupvar('backups::mail_from_real') %>'
+    mail.to                   = '<%= scope.lookupvar('backups::mail_to_real') %>'
     mail.address              = '<%= scope.lookupvar('backups::mail_address') %>'
     mail.port                 = <%= scope.lookupvar('backups::mail_port') %>
     mail.domain               = '<%= scope.lookupvar('backups::mail_domain') %>'

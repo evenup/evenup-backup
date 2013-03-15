@@ -1,7 +1,7 @@
 fixtures:
   repositories:
     concat: git://github.com/ripienaar/puppet-concat.git
-    ruby: git@github.com:evenup/evenup-ruby.git
+    ruby: git://github.com/evenup/evenup-ruby.git
   symlinks:
     backups: "#{source_dir}"
 
