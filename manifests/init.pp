@@ -30,8 +30,8 @@ class backups (
   $mail_success = false,
   $mail_warning = true,
   $mail_failure = true,
-  $mail_from    = "backups@${::fqdn}",
-  $mail_to      = "root@${::domain}",
+  $mail_from    = '',
+  $mail_to      = '',
   $mail_address = 'localhost',
   $mail_port    = '25',
   $mail_domain  = $::domain,
@@ -43,6 +43,16 @@ class backups (
   $hc_from      = 'Backups',
   $hc_notify    = ''  # Which rooms to notify, this should be an array
 ){
+  
+  $mail_from_real = $mail_from ? {
+    ''      => "backups@${::fqdn}",
+    default => $mail_from
+  }
+  
+  $mail_to_real = $mail_to ? {
+    ''      => "root@${::domain}",
+    default => $mail_to
+  }
 
   require ruby
   include ruby::hipchat
