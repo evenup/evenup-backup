@@ -43,16 +43,6 @@ class backups (
   $hc_from      = 'Backups',
   $hc_notify    = ''  # Which rooms to notify, this should be an array
 ){
-  
-  $mail_from_real = $mail_from ? {
-    ''      => "backups@${::fqdn}",
-    default => $mail_from
-  }
-  
-  $mail_to_real = $mail_to ? {
-    ''      => "root@${::domain}",
-    default => $mail_to
-  }
 
   require ruby
   include ruby::hipchat
@@ -60,6 +50,16 @@ class backups (
   include ruby::mail
 
   $backup_node = regsubst($::hostname, '-', '_')
+  
+  $mail_from_real = $mail_from ? {
+    ''      => "backups@${::fqdn}",
+    default => $mail_from
+  }
+
+  $mail_to_real = $mail_to ? {
+    ''      => "root@${::domain}",
+    default => $mail_to
+  }
 
   package {
     # TODO - should these be moved to the ruby class?
