@@ -105,7 +105,8 @@ class backups (
       owner   => root,
       group   => root,
       mode    => '0644',
-      source  => 'puppet:///modules/backups/riak.rb';
+      source  => 'puppet:///modules/backups/riak.rb',
+      require => Package['rubygem-backup'];
 
     # Allow hipchat rooms_notified to accept comma-delimited string: https://github.com/meskyanichi/backup/pull/392
     # Add hostname to notification message.  No PR currently
@@ -113,13 +114,15 @@ class backups (
       owner   => root,
       group   => root,
       mode    => '0644',
-      source  => 'puppet:///modules/backups/hipchat.rb';
+      source  => 'puppet:///modules/backups/hipchat.rb',
+      require => Package['rubygem-backup'];
 
     # Hipchat gem dependency bumped to ~> 0.7.0: https://github.com/meskyanichi/backup/pull/391
     '/usr/lib/ruby/gems/1.8/gems/backup-3.0.27/lib/backup/dependency.rb':
       owner   => root,
       group   => root,
       mode    => '0644',
-      source  => 'puppet:///modules/backups/dependency.rb';
+      source  => 'puppet:///modules/backups/dependency.rb',
+      require => Package['rubygem-backup'];
   }
 }
