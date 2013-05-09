@@ -45,6 +45,10 @@ define backups::archive(
   $tmp_path = '/tmp',
 ){
 
+  include backups
+  Class['backups'] ->
+  Backups::Archive[$name]
+
   concat {
     "/etc/backup/models/${name}.rb":
       owner => root,
@@ -73,12 +77,12 @@ define backups::archive(
     'vagrant' => absent,
     default   => present
   }
-  
+
   $tmp = $tmp_path ? {
     ''      => '',
     default => "--tmp-path $tmp_path"
   }
-  
+
   cron {
     "archive_${name}":
       ensure  => $cron_ensure,
