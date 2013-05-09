@@ -53,6 +53,10 @@ define backups::riak (
   $tmp_path = '/tmp',
 ){
 
+  include backups
+  Class['backups'] ->
+  Backups::Riak[$name]
+
   $ensure = $enable ? {
     true    => 'present',
     default => 'absent',
