@@ -7,13 +7,7 @@ describe 'backups', :type => :class do
   describe "class with default parameters" do
 
     it { should create_class('backups') }
-    it { should include_class('ruby') }
-    it { should include_class('ruby::mail')}
-
-    [ 'rubygem-backup', 'rubygem-fog'].each do |package|
-      it { should create_package(package).with_ensure('latest') }
-    end
-    it { should contain_package('rubygem-excon') }
+    it { should contain_package('rubygem-backup').with_ensure('latest') }
 
     [ '/etc/backup', '/etc/backup/models', '/var/log/backup' ].each do |directory|
       it { should contain_file(directory).with(

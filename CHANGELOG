@@ -1,3 +1,7 @@
+v1.1.0:
+  Dependency on evenup/ruby removed
+  Build moved to bundler due to large number of deps
+  Backup version bump to 3.5.1 - RPM build script provided in ./scripts
 v1.0.0:
   Refactor with paramertized class
 v0.10.5:

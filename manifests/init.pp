@@ -44,11 +44,6 @@ class backups (
   $hc_notify      = ''  # Which rooms to notify, this should be an array
 ){
 
-  require ruby
-  include ruby::hipchat
-  include ruby::httparty
-  include ruby::mail
-
   $backup_node = regsubst($::hostname, '-', '_')
 
   $mail_from_real = $mail_from ? {
@@ -61,68 +56,39 @@ class backups (
     default => $mail_to
   }
 
-  package {
-    # TODO - should these be moved to the ruby class?
-    [ 'rubygem-backup', 'rubygem-fog']:
-      ensure  => $ensure;
-
-    'rubygem-excon':
-      ensure  => '0.14.3-1.el6';
+  package { 'rubygem-backup':
+    ensure  => $ensure,
   }
 
-  file {
-    '/etc/backup':
-      ensure  => directory,
-      owner   => root,
-      group   => admin,
-      mode    => '0550',
-      purge   => true,
-      force   => true,
-      recurse => true;
+  file { '/etc/backup':
+    ensure  => directory,
+    owner   => root,
+    group   => admin,
+    mode    => '0550',
+    purge   => true,
+    force   => true,
+    recurse => true,
+  }
 
-    '/etc/backup/models':
-      ensure  => directory,
-      owner   => root,
-      group   => admin,
-      mode    => '0550',
-      require => File['/etc/backup'];
+  file { '/etc/backup/models':
+    ensure  => directory,
+    owner   => root,
+    group   => admin,
+    mode    => '0550',
+    require => File['/etc/backup'],
+  }
 
-    '/var/log/backup':
-      ensure  => directory,
-      owner   => root,
-      group   => admin,
-      mode    => '0555';
+  file { '/var/log/backup':
+    ensure  => directory,
+    owner   => root,
+    group   => admin,
+    mode    => '0555',
+  }
 
-    '/etc/backup/config.rb':
-      owner   => root,
-      group   => admin,
-      mode    => '0440',
-      content => template('backups/config.rb');
-
-    # Correct backup for riak: https://github.com/meskyanichi/backup/pull/360
-    # Allow setting of riak username and group: https://github.com/meskyanichi/backup/pull/393
-    '/usr/lib/ruby/gems/1.8/gems/backup-3.0.27/lib/backup/database/riak.rb':
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      source  => 'puppet:///modules/backups/riak.rb',
-      require => Package['rubygem-backup'];
-
-    # Allow hipchat rooms_notified to accept comma-delimited string: https://github.com/meskyanichi/backup/pull/392
-    # Add hostname to notification message.  No PR currently
-    '/usr/lib/ruby/gems/1.8/gems/backup-3.0.27/lib/backup/notifier/hipchat.rb':
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      source  => 'puppet:///modules/backups/hipchat.rb',
-      require => Package['rubygem-backup'];
-
-    # Hipchat gem dependency bumped to ~> 0.7.0: https://github.com/meskyanichi/backup/pull/391
-    '/usr/lib/ruby/gems/1.8/gems/backup-3.0.27/lib/backup/dependency.rb':
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      source  => 'puppet:///modules/backups/dependency.rb',
-      require => Package['rubygem-backup'];
+  file { '/etc/backup/config.rb':
+    owner   => root,
+    group   => admin,
+    mode    => '0440',
+    content => template('backups/config.rb'),
   }
 }
