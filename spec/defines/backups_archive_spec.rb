@@ -7,7 +7,7 @@ describe 'backups::archive', :type => :define do
 
   it { should contain_concat('/etc/backup/models/test_archive.rb') }
   it { should contain_cron('archive_test_archive').with(
-    'command' => '/usr/bin/backup perform --trigger test_archive -c /etc/backup/config.rb -l /var/log/backup/ --tmp-path /tmp',
+    'command' => 'cd /opt/backup ; ./bin/backup perform --trigger test_archive -c /etc/backup/config.rb -l /var/log/backup/ --tmp-path /tmp',
     'hour'    => 03,
     'minute'  => 34
   ) }

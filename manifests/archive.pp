@@ -86,7 +86,7 @@ define backups::archive(
   cron {
     "archive_${name}":
       ensure  => $cron_ensure,
-      command => "/usr/bin/backup perform --trigger ${name} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp}",
+      command => "cd /opt/backup ; ./bin/backup perform --trigger ${name} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp}",
       user    => 'root',
       hour    => $hour,
       minute  => $minute;

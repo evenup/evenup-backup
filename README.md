@@ -4,6 +4,10 @@ What is it?
 Puppet module to install the ruby backup gem and create jobs to back up various
 services and directories.
 
+A script to build the rubygem-backup package is provided in scripts.  It adds
+bundler support to backup, bundles everything up, and uses fpm to create an
+RPM.
+
 Released under the Apache 2.0 licence
 
 Usage:
@@ -11,7 +15,7 @@ Usage:
 
 To install:
 <pre>
-  class { 'backups': 
+  class { 'backups':
     aws_access_key  = 'real_aws_access_key,
     aws_secret_key  = 'real_aws_secret_key',
     bucket          = 'mybucket',
