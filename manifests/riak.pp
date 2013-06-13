@@ -100,7 +100,7 @@ define backups::riak (
 
   $tmp = $tmp_path ? {
     ''      => '',
-    default => "--tmp-path $tmp_path"
+    default => "--tmp-path ${tmp_path}"
   }
 
   cron {
