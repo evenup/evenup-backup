@@ -80,7 +80,7 @@ define backups::archive(
 
   $tmp = $tmp_path ? {
     ''      => '',
-    default => "--tmp-path $tmp_path"
+    default => "--tmp-path ${tmp_path}"
   }
 
   cron {
