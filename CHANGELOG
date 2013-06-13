@@ -1,3 +1,6 @@
+v1.1.1:
+  Riak template update
+  Riak database backup fix for sudo
 v1.1.0:
   Dependency on evenup/ruby removed
   Build moved to bundler due to large number of deps

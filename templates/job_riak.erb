@@ -1,7 +1,7 @@
   ##
   # Riak config
   #
-  
+
   archive :riak_config do |archive|
   <% if scope.lookupvar('mode') == 'dev' -%>
     archive.add "/var/lib/riak/dev1/etc"
@@ -17,29 +17,25 @@
   # Riak [Database]
   #
   <% if scope.lookupvar('mode') == 'dev' -%>
-  database Riak do |db|
-    db.name   = "dev1"
+  database Riak, :dev1 do |db|
     db.node   = "dev1@<%= scope.lookupvar('::fqdn') %>"
     db.cookie = "riak"
     db.riak_admin_utility = '/var/lib/riak/dev1/bin/riak-admin'
     db.user = 'riak1'
   end
-  database Riak do |db|
-    db.name   = "dev2"
+  database Riak, :dev2 do |db|
     db.node   = "dev2@<%= scope.lookupvar('::fqdn') %>"
     db.cookie = "riak"
     db.riak_admin_utility = '/var/lib/riak/dev2/bin/riak-admin'
     db.user = 'riak2'
   end
-  database Riak do |db|
-    db.name   = "dev3"
+  database Riak, :dev3 do |db|
     db.node   = "dev3@<%= scope.lookupvar('::fqdn') %>"
     db.cookie = "riak"
     db.riak_admin_utility = '/var/lib/riak/dev3/bin/riak-admin'
     db.user = 'riak3'
   end
-  database Riak do |db|
-    db.name   = "dev4"
+  database Riak, :dev4 do |db|
     db.node   = "dev4@<%= scope.lookupvar('::fqdn') %>"
     db.cookie = "riak"
     db.riak_admin_utility = '/var/lib/riak/dev4/bin/riak-admin'
