@@ -62,8 +62,8 @@ class backups (
 
   file { '/etc/backup':
     ensure  => directory,
-    owner   => root,
-    group   => admin,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0550',
     purge   => true,
     force   => true,
@@ -72,22 +72,22 @@ class backups (
 
   file { '/etc/backup/models':
     ensure  => directory,
-    owner   => root,
-    group   => admin,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0550',
     require => File['/etc/backup'],
   }
 
   file { '/var/log/backup':
     ensure  => directory,
-    owner   => root,
-    group   => admin,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0555',
   }
 
   file { '/etc/backup/config.rb':
-    owner   => root,
-    group   => admin,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0440',
     content => template('backups/config.rb'),
   }

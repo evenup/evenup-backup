@@ -13,13 +13,13 @@ describe 'backups', :type => :class do
       it { should contain_file(directory).with(
         'ensure'  => 'directory',
         'owner'   => 'root',
-        'group'   => 'admin'
+        'group'   => 'root'
       ) }
     end
 
     it { should create_file('/etc/backup/config.rb').with(
       'owner'   => 'root',
-      'group'   => 'admin',
+      'group'   => 'root',
       'mode'    => '0440'
     ) }
 
