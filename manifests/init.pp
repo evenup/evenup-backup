@@ -21,6 +21,7 @@
 class backups (
   $aws_access_key = 'FILLMEIN',
   $aws_secret_key = 'FILLMEIN',
+  $aws_region     = 'us-east-1',
   $bucket         = 'MYBUCKET',
   $ensure         = 'latest',
   $password       = '',
