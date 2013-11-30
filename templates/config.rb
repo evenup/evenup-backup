@@ -16,7 +16,7 @@
  Backup::Storage::S3.defaults do |s3|
    s3.access_key_id     = "<%= scope.lookupvar('backups::aws_access_key') %>"
    s3.secret_access_key = "<%= scope.lookupvar('backups::aws_secret_key') %>"
-   s3.region            = "us-east-1"
+   s3.region            = "<%= scope.lookupvar('backups::aws_region') %>"
    s3.bucket            = "<%= scope.lookupvar('bucket') %>"
    s3.keep              = 10
  end
