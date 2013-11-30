@@ -51,8 +51,8 @@ define backups::archive(
 
   concat {
     "/etc/backup/models/${name}.rb":
-      owner => root,
-      group => admin,
+      owner => 'root',
+      group => 'root',
       mode  => 0440;
   }
 
