@@ -1,14 +1,21 @@
   ##
   # Archives
   #
-  
+
   archive :<%= scope.lookupvar('name') %> do |archive|
 <%  if scope.lookupvar('path').is_a? Array -%>
 <%    scope.lookupvar('path').each do |path| -%>
     archive.add "<%= path %>"
 <%    end -%>
-<%  else -%>      
+<%  else -%>
     archive.add "<%= scope.lookupvar('path') %>"
+<%  end -%>
+<%  if scope.lookupvar('exclude').is_a? Array -%>
+<%    scope.lookupvar('exclude').each do |path| -%>
+    archive.exclude "<%= path %>"
+<%    end -%>
+<%  elsif scope.lookupvar('exclude') != '' -%>
+    archive.exclude "<%= scope.lookupvar('exclude') %>"
 <%  end -%>
   end
 

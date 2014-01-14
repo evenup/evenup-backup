@@ -8,7 +8,7 @@ describe 'backups::riak', :type => :define do
     let(:params) { { :hour => 03, :minute => 34, :mode  => 'dev' } }
     it { should contain_concat('/etc/backup/models/test_riak.rb') }
     it { should contain_cron('riak_test_riak').with(
-      'command' => 'cd /opt/backup ; ./bin/backup perform --trigger test_riak -c /etc/backup/config.rb -l /var/log/backup/ --tmp-path /tmp',
+      'command' => 'cd /opt/backup ; ./bin/backup perform --trigger test_riak -c /etc/backup/config.rb -l /var/log/backup/ --tmp-path /tmp --quiet',
       'hour'    => 03,
       'minute'  => 34
     ) }

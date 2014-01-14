@@ -45,6 +45,10 @@ class backups (
   $hc_notify      = ''  # Which rooms to notify, this should be an array
 ){
 
+  File {
+    require => Package['rubygem-backup'],
+  }
+
   $backup_node = regsubst($::hostname, '-', '_')
 
   $mail_from_real = $mail_from ? {
@@ -68,7 +72,7 @@ class backups (
     mode    => '0444',
     owner   => 'root',
     group   => 'root',
-    source  => 'puppet:///modules/backups/riak.rb'
+    source  => 'puppet:///modules/backups/riak.rb',
   }
 
   file { '/etc/backup':
