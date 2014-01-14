@@ -1,8 +1,9 @@
-source :rubygems
+source 'https://rubygems.org'
 
-puppetversion = ENV['PUPPET_VERSION']
-gem 'puppet', puppetversion, :require => false
+gem 'rake'
 gem 'puppet-lint'
 gem 'rspec-puppet'
-gem 'puppetlabs_spec_helper', '>= 0.4.0'
-
+gem 'puppetlabs_spec_helper'
+gem 'puppet-syntax'
+gem 'puppet', ENV['PUPPET_VERSION'] || '~> 3.2.0'
+#gem 'vagrant-wrapper'
