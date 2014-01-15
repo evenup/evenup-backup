@@ -5,4 +5,5 @@ license 'Apache'
 project_page 'http://www.letsevenup.com'
 summary 'Manages backups'
 description 'Installs and configures backup scripts, config files, and cron entries'
-dependency 'ripienaar/concat', '>= 0.2.0'
+dependency 'puppetlabs/concat'
+
