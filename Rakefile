@@ -19,6 +19,12 @@ PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
+task :spec => []; Rake::Task[:spec].clear
+task :spec do
+  Rake::Task[:spec_prep].invoke
+  Rake::Task[:spec_standalone].invoke
+end
+
 task :default => [:test]
 
 desc "Run syntax, lint, and spec tests."
