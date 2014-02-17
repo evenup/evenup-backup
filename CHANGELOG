@@ -1,3 +1,4 @@
+v1.2.0
   Remove backup 3.3.0 deprecation warnings
   Add riakdev job
   Remove concat dependency
