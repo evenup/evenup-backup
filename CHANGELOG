@@ -1,3 +1,6 @@
+  Remove backup 3.3.0 deprecation warnings
+  Add riakdev job
+  Remove concat dependency
 v1.1.1:
   Riak template update
   Riak database backup fix for sudo
