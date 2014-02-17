@@ -50,28 +50,15 @@ define backups::archive(
   Class['backups'] ->
   Backups::Archive[$name]
 
-  concat {
-    "/etc/backup/models/${name}.rb":
-      owner => 'root',
-      group => 'root',
-      mode  => 0440;
-  }
+  $bad_chars = '\.\\\/-'
+  $name_real = regsubst($name, "[${bad_chars}]", '_', 'G')
 
-  concat::fragment {
-    "backup_archive_header_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_header.erb'),
-      order   => 01;
-
-    "backups_archive_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_archive.erb'),
-      order   => 02;
-
-    "backup_archive_footer_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_footer.erb'),
-      order   => 99;
+  file { "/etc/backup/models/${name}.rb":
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
+    content => template("${module_name}/job_header.erb", "${module_name}/job_archive.erb", "${module_name}/job_footer.erb"),
+    require => Class['backups'],
   }
 
   $cron_ensure = $::disposition ? {
@@ -84,12 +71,11 @@ define backups::archive(
     default => "--tmp-path ${tmp_path}"
   }
 
-  cron {
-    "archive_${name}":
-      ensure  => $cron_ensure,
-      command => "cd /opt/backup ; ./bin/backup perform --trigger ${name} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp} --quiet",
-      user    => 'root',
-      hour    => $hour,
-      minute  => $minute;
+  cron { "archive_${name}":
+    ensure  => $cron_ensure,
+    command => "cd /opt/backup ; ./bin/backup perform --trigger ${name_real} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp} --quiet",
+    user    => 'root',
+    hour    => $hour,
+    minute  => $minute;
   }
 }

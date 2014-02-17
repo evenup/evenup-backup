@@ -67,13 +67,13 @@ class backups (
 
   # Putting this override here rather than in the package
   # Submitted upstream: PR448 (https://github.com/meskyanichi/backup/pull/448)
-  file { '/opt/backup/lib/backup/database/riak.rb':
-    ensure  => file,
-    mode    => '0444',
-    owner   => 'root',
-    group   => 'root',
-    source  => 'puppet:///modules/backups/riak.rb',
-  }
+#  file { '/opt/backup/lib/backup/database/riak.rb':
+#    ensure  => file,
+#    mode    => '0444',
+#    owner   => 'root',
+#    group   => 'root',
+#    source  => 'puppet:///modules/backups/riak.rb',
+#  }
 
   file { '/etc/backup':
     ensure  => directory,

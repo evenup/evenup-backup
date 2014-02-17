@@ -59,45 +59,25 @@ define backups::mongodb (
   Class['backups'] ->
   Backups::Mongodb[$name]
 
+  $bad_chars = '\.\\\/-'
+  $name_real = regsubst($name, "[${bad_chars}]", '_', 'G')
+
   $ensure = $enable ? {
     true    => 'present',
     default => 'absent',
   }
 
-  concat {
-    "/etc/backup/models/${name}.rb":
-      owner => 'root',
-      group => 'root',
-      mode  => 0440;
+  file { "/etc/backup/models/${name}.rb":
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
+    content => template("${module_name}/job_header.erb", "${module_name}/job_mongodb.erb", "${module_name}/job_footer.erb"),
+    require => Class['backups'],
   }
 
-  concat::fragment {
-    "backup_mongodb_header_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_header.erb'),
-      order   => 01;
-
-    "backups_mongodb_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_mongodb.erb'),
-      order   => 20;
-
-    "backup_mongodb_footer_${name}":
-      target  => "/etc/backup/models/${name}.rb",
-      content => template('backups/job_footer.erb'),
-      order   => 99;
-  }
-
-  case $::disposition {
-    'vagrant':  {
-      $cron_ensure = 'absent'
-    }
-    default  :  {
-      $cron_ensure = $enable ? {
-        true    => 'present',
-        default => 'absent',
-      }
-    }
+  $cron_ensure = $enable ? {
+    true    => 'present',
+    default => 'absent',
   }
 
   $tmp = $tmp_path ? {
@@ -105,13 +85,12 @@ define backups::mongodb (
     default => "--tmp-path ${tmp_path}"
   }
 
-  cron {
-    "mongodb_${name}":
-      ensure  => $cron_ensure,
-      command => "cd /opt/backup ; ./bin/backup perform --trigger ${name} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp}",
-      user    => 'root',
-      hour    => $hour,
-      minute  => $minute;
+  cron { "mongodb_${name}":
+    ensure  => $cron_ensure,
+    command => "cd /opt/backup ; ./bin/backup perform --trigger ${name_real} -c /etc/backup/config.rb -l /var/log/backup/ ${tmp} --quiet",
+    user    => 'root',
+    hour    => $hour,
+    minute  => $minute;
   }
 
 }
