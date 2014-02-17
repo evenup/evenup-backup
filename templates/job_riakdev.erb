@@ -1,0 +1,22 @@
+<%- numNodes = @numNodes.to_i -%>
+  ##
+  # Riak config
+  #
+
+  archive :riak_config do |archive|
+<%- (1..numNodes).each do |node| -%>
+    archive.add "/var/lib/riak/dev<%= node %>/etc"
+<%- end -%>
+  end
+
+  ##
+  # Riak [Database]
+  #
+<%- (1..numNodes).each do |node| -%>
+  database Riak, :dev<%= node %> do |db|
+    db.node   = "dev<%= node %>@<%= scope.lookupvar('::fqdn') %>"
+    db.cookie = "riak"
+    db.riak_admin_utility = '/var/lib/riak/dev<%= node %>/bin/riak-admin'
+    db.user = 'riak<%= node %>'
+  end
+<%- end -%>

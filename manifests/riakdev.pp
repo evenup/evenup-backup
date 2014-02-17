@@ -10,9 +10,9 @@
 # [*minute*]
 #   Integer.  This controls the minute of the cron entry job
 #
-# [*cookie*]
-#   String.  Riak cluster cookie
-#   Default: riak
+# [*numNodes*]
+#   Integer.  Number of riak dev nodes
+#   Default: 3
 #
 # [*keep*]
 #   Integer.  Number of backups to keep for this job.
@@ -40,24 +40,26 @@
 #
 # === Copyright
 #
-# Copyright 2012 EvenUp.
+# Copyright 2014 EvenUp.
 #
-define backups::riak (
+define backups::riakdev (
   $hour,
   $minute,
-  $cookie       = 'riak',
-  $database_id  = $::hostname,
-  $keep         = 0,
-  $enable       = true,
-  $tmp_path     = '/tmp',
+  $numNodes = 3,
+  $keep     = 0,
+  $enable   = true,
+  $tmp_path = '/tmp',
 ){
 
   include backups
   Class['backups'] ->
-  Backups::Riak[$name]
+  Backups::Riakdev[$name]
+
+  if !is_integer($numNodes) {
+    fail("numNodes for ${name} must be an integer")
+  }
 
   $bad_chars = '\.\\\/-'
-  $database_id_real = regsubst($database_id, "[${bad_chars}]", '_', 'G')
   $name_real = regsubst($name, "[${bad_chars}]", '_', 'G')
 
   $ensure = $enable ? {
@@ -69,7 +71,7 @@ define backups::riak (
     owner   => 'root',
     group   => 'root',
     mode    => '0440',
-    content => template("${module_name}/job_header.erb", "${module_name}/job_riak.erb", "${module_name}/job_footer.erb"),
+    content => template("${module_name}/job_header.erb", "${module_name}/job_riakdev.erb", "${module_name}/job_footer.erb"),
     require => Class['backups'],
   }
 
