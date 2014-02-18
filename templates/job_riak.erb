@@ -2,6 +2,10 @@
   # Riak config
   #
 
+  Utilities.configure do
+    riak_admin '/usr/sbin/riak-admin'
+  end
+
   archive :riak_config do |archive|
     archive.add "/etc/riak"
   end
