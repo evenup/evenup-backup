@@ -27,6 +27,7 @@ class backups (
   $password       = '',
   $enable_mail    = false,
   $enable_hc      = false,
+  $logstash       = false,
   # Mail Config
   $mail_success   = false,
   $mail_warning   = true,
@@ -96,4 +97,12 @@ class backups (
     mode    => '0440',
     content => template('backups/config.rb'),
   }
+
+  if $logstash {
+    beaver::stanza { '/var/log/backup/backup.log':
+      type    => 'backup',
+      tags    => [$::disposition],
+    }
+  }
+
 }
