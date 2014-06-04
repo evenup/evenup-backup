@@ -16,7 +16,7 @@ Usage:
 To install:
 <pre>
   class { 'backups':
-    aws_access_key  = 'real_aws_access_key,
+    aws_access_key  = 'real_aws_access_key',
     aws_secret_key  = 'real_aws_secret_key',
     bucket          = 'mybucket',
   }
