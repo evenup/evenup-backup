@@ -1,9 +1,9 @@
 name 'evenup-backups'
-version '1.2.1'
+version '1.3.0'
 author 'Justin Lambert <jlambert@letsevenup.com>'
 license 'Apache'
-project_page 'http://www.letsevenup.com'
+source 'https://github.com/evenup/evenup-backups'
 summary 'Manages backups'
 description 'Installs and configures backup scripts, config files, and cron entries'
-dependency 'puppetlabs/stdlib'
+dependency 'puppetlabs/stdlib', '>=3.2.0'
 
