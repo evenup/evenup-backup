@@ -1,3 +1,5 @@
+20140603 - v1.3.0
+  Added optional beaver log shipping param
 20140218 - v1.2.1
   Set riak-admin path
   Cleanup of unused file
