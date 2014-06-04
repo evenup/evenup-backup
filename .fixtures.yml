@@ -1,5 +1,6 @@
 fixtures:
   repositories:
+    beaver: https://github.com/evenup/evenup-beaver.git
     ruby: https://github.com/evenup/evenup-ruby.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:

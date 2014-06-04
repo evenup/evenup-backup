@@ -23,6 +23,14 @@ describe 'backups', :type => :class do
       'mode'    => '0440'
     ) }
 
+    it { should_not contain_beaver__stanza('/var/log/backup/backup.log') }
+
+  end
+
+  context 'with logging' do
+    let(:params) { { :logstash => true } }
+
+    it { should contain_beaver__stanza('/var/log/backup/backup.log') }
   end
 
 end
