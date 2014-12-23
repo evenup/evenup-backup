@@ -1,7 +1,12 @@
-require 'rubygems'
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
+
+begin
+  require 'puppet_blacksmith/rake_tasks'
+rescue LoadError
+end
 
 exclude_paths = [
   "pkg/**/*",
@@ -9,28 +14,28 @@ exclude_paths = [
   "spec/**/*",
 ]
 
-PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
-PuppetLint.configuration.fail_on_warnings = true
-PuppetLint.configuration.send("disable_80chars")
-PuppetLint.configuration.send("disable_autoloader_layout")
-PuppetLint.configuration.send("disable_quoted_booleans")
-PuppetLint.configuration.send('disable_class_parameter_defaults')
-PuppetLint.configuration.send('disable_class_inherits_from_params_class')
+PuppetLint.configuration.relative = true
+PuppetLint.configuration.fail_on_warnings
 PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_80chars')
+PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetSyntax.exclude_paths = exclude_paths
 
-task :spec => []; Rake::Task[:spec].clear
-task :spec do
-  Rake::Task[:spec_prep].invoke
-  Rake::Task[:spec_standalone].invoke
+desc "Run acceptance tests"
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
 end
 
-task :default => [:test]
+task :metadata do
+  sh "metadata-json-lint metadata.json"
+end
 
 desc "Run syntax, lint, and spec tests."
 task :test => [
   :syntax,
   :lint,
+  :metadata,
   :spec,
 ]
-

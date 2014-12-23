@@ -1,0 +1,9 @@
+  ##
+  # Local [Storage]
+  #
+  store_with Local do |local|
+    local.path = "<%= @_path %>"
+<% if @keep -%>
+    local.keep = <%= @keep -%>
+<% end %>
+  end

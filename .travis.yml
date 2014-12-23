@@ -1,48 +1,65 @@
+---
 language: ruby
-bundler_args: --without development
-script: "bundle exec rake spec SPEC_OPTS='--format documentation'"
-rvm:
-  - 1.8.7
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-script:
-  - "rake lint"
-  - "rake spec SPEC_OPTS='--format documentation'"
-  - "rake spec"
-env:
-  - PUPPET_VERSION="~> 2.7.0"
-  - PUPPET_VERSION="~> 3.1.0"
-  - PUPPET_VERSION="~> 3.2.0"
-  - PUPPET_VERSION="~> 3.3.0"
-  - PUPPET_VERSION="~> 3.4.0"
-  - PUPPET_VERSION="~> 3.5.0"
-  - PUPPET_VERSION="~> 3.6.0"
+cache: bundler
+bundler_args: --without system_tests development
+script: "bundle exec rake validate && bundle exec rake test SPEC_OPTS='--format documentation'"
+sudo: false
 matrix:
-  exclude:
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 2.7.0"
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 2.7.0"
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 3.1.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 2.7.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 3.0.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 3.1.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 3.2.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 3.3.0"
-    - rvm: 2.1.0
-      env: PUPPET_VERSION="~> 3.4.0"
+  fast_finish: true
+  include:
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.1.0"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.2.0"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.3.0"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.4.0"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES="yes"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES="yes"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES="yes"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.1.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.2.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.3.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.4.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES="yes"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES="yes"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES="yes"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.2.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.3.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.4.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES="yes"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES="yes"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES="yes"
+  - rvm: 2.1.0
+    env: PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES="yes"
+  - rvm: 2.1.0
+    env: PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES="yes"
+  - rvm: 2.1.0
+    env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES="yes"
 notifications:
   email: false
   hipchat:
     rooms:
-      - secure: "RjspEiQgVB270pEgaJ//M3R7a+1n9sT2Feig1iIKdGOjh2QzwXVmoJTkuWK2\nMVDMBf7aLAYCj1HWJkfQhe6VrbIou73lpbkQRv5x9lqT96D/BVFmVyvq7bBG\n+KNpzq0jvBCWjUTel5r24IoHj2EUnYzmBXluBObpiRJILWxOneM="
+      - secure: 
+    template:
+      - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} (<a href="%{build_url}">Details</a>/<a href="%{compare_url}">Change view</a>)'
+    format: html
   on_success: always
   on_failure: always
-

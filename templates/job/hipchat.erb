@@ -1,0 +1,17 @@
+  ##
+  # HipChat [Notifier]
+  #
+  notify_by Hipchat do |hipchat|
+    hipchat.on_success = <%= @hc_success %>
+    hipchat.on_warning = <%= @hc_warning %>
+    hipchat.on_failure = <%= @hc_failure %>
+
+    hipchat.success_color = 'green'
+    hipchat.warning_color = 'yellow'
+    hipchat.failure_color = 'red'
+
+    hipchat.token = '<%= @hc_token %>'
+    hipchat.from = '<%= @hc_from %>'
+<% _hc_notify = Array(@hc_notify) -%>
+    hipchat.rooms_notified = ['<%= _hc_notify.join("', '") %>']
+  end

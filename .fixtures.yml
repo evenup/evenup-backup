@@ -1,8 +1,6 @@
 fixtures:
   repositories:
-    beaver: https://github.com/evenup/evenup-beaver.git
-    ruby: https://github.com/evenup/evenup-ruby.git
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:
-    backups: "#{source_dir}"
-
+    backup: "#{source_dir}"

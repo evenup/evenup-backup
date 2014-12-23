@@ -1,0 +1,16 @@
+  ##
+  # Mail [Notifier]
+  #
+  notify_by Mail do |mail|
+    mail.on_success           = <%= @email_success %>
+    mail.on_warning           = <%= @email_warning %>
+    mail.on_failure           = <%= @email_failure %>
+    mail.from                 = "<%= @_email_from %>"
+    mail.to                   = "<%= @email_to %>"
+<% if @relay_host -%>
+    mail.address              = "<%= @relay_host %>"
+<% end -%>
+<% if @relay_host -%>
+    mail.port                 = <%= @relay_port %>
+<% end -%>
+  end
