@@ -1,0 +1,15 @@
+  ##
+  # Amazon Simple Storage Service [Storage]
+  #
+  store_with S3 do |s3|
+    s3.access_key_id     = "<%= @aws_access_key -%>"
+    s3.secret_access_key = "<%= @aws_secret_key -%>"
+    s3.path              = "<%= @_path -%>"
+    s3.bucket            = "<%= @bucket -%>"
+<% if @aws_region -%>
+    s3.region            = "<%= @aws_region -%>"
+<% end -%>
+<% if @keep -%>
+    s3.keep              = <%= @keep -%>
+<% end -%>
+  end

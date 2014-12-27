@@ -1,0 +1,9 @@
+  ##
+  # Split [Splitter]
+  #
+  # Split the backup file in to smaller chunks
+  #
+  # To restore, simply concatinate all of the files in order
+  # cat my_backup.tar.gz.enc-aaa my_backup.tar.gz.enc-aab my_backup.tar.gz.enc-aac > my_backup.tar.gz.enc
+  #
+  split_into_chunks_of <%= @split_into %>

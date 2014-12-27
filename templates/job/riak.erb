@@ -1,0 +1,7 @@
+  ##
+  # Riak [Database]
+  #
+  database Riak, :riak do |db|
+    db.node   = "<%= @node %>"
+    db.cookie = "<%= @cookie %>"
+  end

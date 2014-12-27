@@ -1,0 +1,8 @@
+  ##
+  # Gzip [Compressor]
+  #
+  compress_with Gzip do |compression|
+<% if @level -%>
+    compression.level = <%= @level %>
+<% end -%>
+  end

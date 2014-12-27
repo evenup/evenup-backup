@@ -1,0 +1,21 @@
+  ##
+  # MongoDB [Database]
+  #
+  database MongoDB do |db|
+    db.name     = "<%= dbname %>"
+<%  if @username -%>
+    db.username = "<%= username %>"
+    db.password = "<%= password %>"
+<%  end -%>
+    db.host     = "<%= host %>"
+<% if @port -%>
+    db.port     = "<%= port %>"
+<%  end -%>
+<% if @lock -%>
+    db.lock     = <%= lock %>
+<%  end -%>
+<% if @collections -%>
+<%    _collections = Array(@collections) -%>
+    db.only_collections = ['<%= _collections.join("', '") -%>']
+<%  end -%>
+  end

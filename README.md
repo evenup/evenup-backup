@@ -15,7 +15,7 @@ Usage:
 
 To install:
 <pre>
-  class { 'backups':
+  class { 'backup':
     aws_access_key  = 'real_aws_access_key',
     aws_secret_key  = 'real_aws_secret_key',
     bucket          = 'mybucket',
@@ -24,7 +24,7 @@ To install:
 
 To backup the /opt/myapp/logs and /var/log/ directories at 4:25 every day:
 <pre>
-  backups::archive { 'logs'
+  backup::archive { 'logs'
     path    => [ '/opt/myapp/logs', '/var/log' ],
     hour    => 4,
     minute  => 25,
@@ -33,7 +33,7 @@ To backup the /opt/myapp/logs and /var/log/ directories at 4:25 every day:
 
 To backup a development Riak install:
 <pre>
-  backups::archive { 'dev-riak'
+  backup::archive { 'dev-riak'
     mode    => 'dev',
     hour    => 4,
     minute  => 25,

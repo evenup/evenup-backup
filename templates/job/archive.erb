@@ -1,0 +1,14 @@
+  ##
+  # Archive
+  #
+
+  archive :archive do |archive|
+<%  Array(@add).each do |element| -%>
+    archive.add '<%= element -%>'
+<% end -%>
+<%  if @exclude -%>
+<%    Array(@exclude).each do |element| -%>
+    archive.exclude '<%= element %>'
+<%    end -%>
+<%  end -%>
+  end
