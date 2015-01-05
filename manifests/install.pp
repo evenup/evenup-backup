@@ -21,4 +21,29 @@ class backup::install {
     provider => $::backup::package_provider,
   }
 
+  file { '/etc/backup':
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0550',
+    purge   => $::backup::purge_jobs,
+    force   => $::backup::purge_jobs,
+    recurse => $::backup::purge_jobs,
+  }
+
+  file { '/etc/backup/models':
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0550',
+    require => File['/etc/backup'],
+  }
+
+  file { '/var/log/backup':
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0555',
+  }
+
 }
