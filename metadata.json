@@ -2,7 +2,7 @@
   "name": "evenup-backup",
   "version": "0.1.0",
   "author": "Justin Lambert <jlambert@letsevenup.com>",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "summary": "Manages backups",
   "source": "https://github.com/evenup/evenup-backup",
   "project_page": "https://github.com/evenup/evenup-backup",
@@ -11,7 +11,7 @@
   "operatingsystem_support": [
     { "operatingsystem": "RedHat", "operatingsystemrelease": [ "7" ] },
     { "operatingsystem": "CentOS", "operatingsystemrelease": [ "7" ] },
-    { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "12.04", "14.04" ] }
+    { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04" ] }
   ],
   "dependencies": [
     { "name": "puppetlabs/concat", "version_requirement": ">=1.1.0 <2.0.0" },

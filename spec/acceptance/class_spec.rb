@@ -22,6 +22,7 @@ describe 'backup class' do
   context 'backup job' do
     it 'should work idempotently with no errors' do
       pp = <<-EOS
+      class { 'backup': }
       backup::job { 'beaker_job':
         types        => 'archive',
         add          => ['/var/log', '/boot'],

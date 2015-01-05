@@ -6,6 +6,7 @@ describe 'backup::job', :types=> :define do
     :fqdn => 'testhost.foo.com',
     :domain => 'foo.com',
     :osfamily => 'RedHat',
+    :lsbmajordistrelease => '7',
     :id => 'root',
     :path => '/bin:/sbin:/usr/sbin:/usr/bin',
     :kernel => 'Linux'
@@ -22,7 +23,8 @@ describe 'backup::job', :types=> :define do
         :storage_type   => 'local',
         :path           => '/backups'
       } }
-      it { expect { is_expected.to compile }.to raise_error }
+
+      it { expect { is_expected.to compile }.to raise_error(/Invalid ensure foo/) }
     end
 
     context 'bad utilities' do
@@ -33,7 +35,7 @@ describe 'backup::job', :types=> :define do
         :storage_type   => 'local',
         :path           => '/backups'
       } }
-      it { expect { is_expected.to compile }.to raise_error }
+      it { expect { is_expected.to compile }.to raise_error(/Utility paths need to be a hash/) }
     end
 
     context 'bad type (string)' do
@@ -43,7 +45,7 @@ describe 'backup::job', :types=> :define do
         :storage_type   => 'local',
         :path           => '/backups'
       } }
-      it { expect { is_expected.to compile }.to raise_error }
+      it { expect { is_expected.to compile }.to raise_error(/Invalid types in 'foo'/) }
     end
 
     context 'bad type (array)' do
@@ -53,7 +55,7 @@ describe 'backup::job', :types=> :define do
         :storage_type   => 'local',
         :path           => '/backups'
       } }
-      it { expect { is_expected.to compile }.to raise_error }
+      it { expect { is_expected.to compile }.to raise_error(/Invalid types in 'archive, foo'/) }
     end
 
     context 'archive' do
@@ -63,7 +65,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/specified with the 'add'/) }
       end
 
       context 'archive type with bad add' do
@@ -73,7 +75,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/add parameter takes either an individual path as a string or an array of paths/) }
       end
 
       context 'archive type with bad exclude' do
@@ -84,7 +86,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/exclude parameter takes either an individual path as a string or an array of paths/) }
       end
     end
 
@@ -97,7 +99,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Invalid port \(foo\)/) }
       end
 
       context 'database without name' do
@@ -106,7 +108,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/dbname is required with this database type/) }
       end
 
       context 'database username without password' do
@@ -117,7 +119,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Database password is required with username/) }
       end
     end
 
@@ -130,7 +132,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Collections to backup for MongoDB must be a string or array/) }
       end
 
       context 'bad mongodb lock' do
@@ -141,7 +143,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
     end # mongodb
 
@@ -153,7 +155,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'foo',
           :path           => '/backups'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Currently supported storage types are/) }
       end
 
       context 'bad keep interval' do
@@ -164,7 +166,7 @@ describe 'backup::job', :types=> :define do
           :path           => '/backups',
           :keep           => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/keep must be an integer/) }
       end
 
       context 'bad split_into' do
@@ -176,11 +178,11 @@ describe 'backup::job', :types=> :define do
           :split_into     => 'foo',
         } }
 
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/split_into is set it must be an integer/) }
       end
     end # generic storage
 
-    context 'local' do
+    context 'local storage' do
       context 'missing path' do
         let(:params) { {
           :types          => 'archive',
@@ -188,11 +190,11 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local'
         } }
 
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Path parameter is required/) }
       end
     end #local
 
-    context 's3' do
+    context 's3 storage' do
       context 'missing aws_access_key' do
         let(:params) { {
           :types          => 'archive',
@@ -201,7 +203,7 @@ describe 'backup::job', :types=> :define do
           :aws_secret_key => 'foo',
           :bucket         => 'bucket'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Parameter aws_access_key is required/) }
       end
 
       context 'missing aws_secret_key' do
@@ -212,7 +214,7 @@ describe 'backup::job', :types=> :define do
           :aws_access_key => 'foo',
           :bucket         => 'bucket'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Parameter aws_secret_key is required/) }
       end
 
       context 'missing bucket' do
@@ -223,7 +225,7 @@ describe 'backup::job', :types=> :define do
           :aws_access_key => 'foo',
           :aws_secret_key => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/S3 bucket must be specified/) }
       end
 
       context 'invalid region' do
@@ -236,7 +238,7 @@ describe 'backup::job', :types=> :define do
           :bucket         => 'bucket',
           :aws_region     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/foo is an invalid region/) }
       end
     end
 
@@ -250,11 +252,11 @@ describe 'backup::job', :types=> :define do
           :encryptor      => 'foo',
         } }
 
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Supported encryptors are/) }
       end
     end
 
-    context 'openssl' do
+    context 'openssl encryptor' do
       context 'missing openssl_password' do
         let(:params) { {
           :types          => 'archive',
@@ -263,7 +265,7 @@ describe 'backup::job', :types=> :define do
           :path           => '/backups',
           :encryptor      => 'openssl'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/'openssl_password' must be set/) }
       end
     end
 
@@ -276,7 +278,7 @@ describe 'backup::job', :types=> :define do
           :path           => '/backups',
           :compressor     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/Supported compressors are/) }
       end
 
       context 'invalid compressor level' do
@@ -288,7 +290,7 @@ describe 'backup::job', :types=> :define do
           :compressor     => 'bzip2',
           :level          => 33
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/The 'level' parameter takes integers/) }
       end
     end
 
@@ -299,11 +301,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo@foosome.com',
           :email_success  => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'invalid email_warning' do
@@ -312,11 +314,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo@foosome.com',
           :email_warning  => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'invalid email_failure' do
@@ -325,11 +327,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo@foosome.com',
           :email_failure  => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'invalid email_from' do
@@ -338,11 +340,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo@foosome.com',
           :email_from     => 'bob'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/bob is not a valid email address/) }
       end
 
       context 'missing email_to' do
@@ -351,9 +353,9 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true
+          :enable_email   => true
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/A destination email address is required/) }
       end
 
       context 'invalid email_to' do
@@ -362,10 +364,10 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/foo is not a valid email address/) }
       end
 
       context 'invalid relay_port' do
@@ -374,11 +376,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :email_enable   => true,
+          :enable_email   => true,
           :email_to       => 'foo@foosome.com',
           :relay_port     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/relay_port must be a port number/) }
       end
     end
 
@@ -389,12 +391,12 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde',
           :hc_notify      => 'Room',
           :hc_success     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'invalid hc_warning' do
@@ -403,12 +405,12 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde',
           :hc_notify      => 'Room',
           :hc_warning     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'invalid hc_failure' do
@@ -417,12 +419,12 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde',
           :hc_notify      => 'Room',
           :hc_failure     => 'foo'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
 
       context 'missing hc_token' do
@@ -431,10 +433,10 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_notify      => 'Room'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/hc_token is required/) }
       end
 
       context 'missing hc_notify' do
@@ -443,10 +445,10 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde'
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/hc_notify needs to be/) }
       end
 
       context 'invalid hc_notify' do
@@ -455,11 +457,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde',
           :hc_notify      => { 'a' => 'b' }
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/hc_notify needs to be/) }
       end
 
       context 'hc_notify as empty array' do
@@ -468,11 +470,11 @@ describe 'backup::job', :types=> :define do
           :add            => '/here',
           :storage_type   => 'local',
           :path           => '/backups',
-          :hc_enable      => true,
+          :enable_hc      => true,
           :hc_token       => 'abcde',
           :hc_notify      => []
         } }
-        it { expect { is_expected.to compile }.to raise_error }
+        it { expect { is_expected.to compile }.to raise_error(/hc_notify needs to be/) }
       end
     end
   end #validations
