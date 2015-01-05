@@ -1,20 +1,2 @@
-20140603 - v1.3.0
-  Added optional beaver log shipping param
-20140218 - v1.2.1
-  Set riak-admin path
-  Cleanup of unused file
-v1.2.0
-  Remove backup 3.3.0 deprecation warnings
-  Add riakdev job
-  Remove concat dependency
-v1.1.1:
-  Riak template update
-  Riak database backup fix for sudo
-v1.1.0:
-  Dependency on evenup/ruby removed
-  Build moved to bundler due to large number of deps
-  Backup version bump to 3.5.1 - RPM build script provided in ./scripts
-v1.0.0:
-  Refactor with paramertized class
-v0.10.5:
-  Initial public release
+v0.1.0:
+  Initial public release (rename from evenup/backups)
