@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe 'backup', :type => :class do
-  let(:facts) { { :osfamily => 'RedHat' } }
+  let(:facts) { { :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
 
   describe 'Redhat' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
 
     context 'install dependencies' do
       it { should contain_package('libxml2-devel') }
@@ -18,7 +18,7 @@ describe 'backup', :type => :class do
   end
 
   describe 'Debian' do
-    let(:facts) { { :osfamily => 'Debian' } }
+    let(:facts) { { :osfamily => 'Debian', :lsbmajordistrelease => '14.04' } }
 
     context 'install dependencies' do
       it { should contain_package('libxml2-dev') }
@@ -32,7 +32,7 @@ describe 'backup', :type => :class do
   end
 
   describe 'backup package' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
 
     context 'default (latest)' do
       it { should contain_package('rubygem-backup').with(:ensure => 'latest', :provider => 'gem' ) }

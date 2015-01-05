@@ -91,7 +91,8 @@ define backup::job (
   }
 
   if !member(['archive', 'mongodb', 'riak'], $_types) {
-    fail("[Backup::Job::${name}]: Invalid types.  Supported types are archive, mongodb, and riak")
+    $__types = join($_types, ', ')
+    fail("[Backup::Job::${name}]: Invalid types in '${__types}'.  Supported types are archive, mongodb, and riak")
   }
 
   # Validate archive specific things
@@ -110,7 +111,7 @@ define backup::job (
   # Validate database specific things
   if member($_types, 'mongodb') {
     if $port and !is_integer($port) {
-      fail("[Backup::Job::${name}]: Invalid port - ${port}")
+      fail("[Backup::Job::${name}]: Invalid port (${port})")
     }
   }
 
