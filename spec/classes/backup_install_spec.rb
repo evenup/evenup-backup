@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe 'backup', :type => :class do
-  let(:facts) { { :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
 
   describe 'Redhat' do
     let(:facts) { { :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
 
     context 'install dependencies' do
       it { should contain_package('libxml2-devel') }
+
+      [ '/etc/backup', '/etc/backup/models', '/var/log/backup' ].each do |directory|
+        it { should contain_file(directory).with(:ensure => 'directory' ) }
+      end
     end
 
     context 'without dependencies' do
@@ -21,6 +24,10 @@ describe 'backup', :type => :class do
     let(:facts) { { :osfamily => 'Debian', :lsbmajordistrelease => '14.04' } }
 
     context 'install dependencies' do
+      [ '/etc/backup', '/etc/backup/models', '/var/log/backup' ].each do |directory|
+        it { should contain_file(directory).with(:ensure => 'directory' ) }
+      end
+
       it { should contain_package('libxml2-dev') }
     end
 

@@ -5,10 +5,6 @@ describe 'backup', :type => :class do
 
   describe "class with default parameters" do
 
-    [ '/etc/backup', '/etc/backup/models', '/var/log/backup' ].each do |directory|
-      it { should contain_file(directory).with(:ensure => 'directory' ) }
-    end
-
     it { should create_file('/etc/backup/config.rb')}
   end
 
