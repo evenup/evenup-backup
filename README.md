@@ -1,46 +1,3 @@
-What is it?
-===========
-
-A script to build the rubygem-backup package is provided in scripts.  It adds
-bundler support to backup, bundles everything up, and uses fpm to create an
-RPM.
-
-Released under the Apache 2.0 licence
-
-Usage:
-------
-
-To install:
-<pre>
-  class { 'backup':
-    aws_access_key  = 'real_aws_access_key',
-    aws_secret_key  = 'real_aws_secret_key',
-    bucket          = 'mybucket',
-  }
-</pre>
-
-To backup the /opt/myapp/logs and /var/log/ directories at 4:25 every day:
-<pre>
-  backup::archive { 'logs'
-    path    => [ '/opt/myapp/logs', '/var/log' ],
-    hour    => 4,
-    minute  => 25,
-  }
-</pre>
-
-To backup a development Riak install:
-<pre>
-  backup::archive { 'dev-riak'
-    mode    => 'dev',
-    hour    => 4,
-    minute  => 25,
-  }
-</pre>
-
-
-
-
-
 [![Puppet Forge](http://img.shields.io/puppetforge/v/evenup/backup.svg)](https://forge.puppetlabs.com/evenup/backup)
 [![Build Status](https://travis-ci.org/evenup/evenup-backup.png?branch=master)](https://travis-ci.org/evenup/evenup-backup)
 
@@ -67,6 +24,8 @@ Puppet module to install the ruby backup gem and create jobs to back up various 
 The ruby backup gem allows backing up files and various databases and optionally compressing, encrypting, and splitting them into smaller chunks, and copying them to remote systems or file storage service.
 
 This module will install the backup gem, but more powerfully allows the creation and scheduling of jobs based on the backup DSL.
+
+A script is provided in the scripts directory to create a standalone RPM with [fpm](https://github.com/jordansissel/fpm/wiki) which includes a global binary to run jobs.
 
 ## Setup
 
