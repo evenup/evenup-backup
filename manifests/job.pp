@@ -41,6 +41,13 @@ define backup::job (
   $aws_secret_key   = undef,
   $bucket           = undef,
   $aws_region       = undef,
+  # Remote server common
+  $server_username  = undef,
+  $server_password  = undef,
+  $server_ip        = undef,
+  $server_port      = undef,
+  # FTP
+  $server_passive_mode = false,
 
   ## Encryptors
   $encryptor        = undef,
@@ -134,7 +141,7 @@ define backup::job (
   } # MongoDB
 
   # Storage
-  if !member(['s3', 'local'], $storage_type) {
+  if !member(['s3', 'local', 'ftp'], $storage_type) {
     fail("[Backup::Job::${name}]: Currently supported storage types are: s3 and local")
   }
 
@@ -146,8 +153,9 @@ define backup::job (
     fail("[Backup::Job::${name}]: If split_into is set it must be an integer")
   }
 
-  # s3 and local require path parameter
-  if $storage_type == 'local' {
+  # s3 and local and ftp require path parameter
+  ## code review: even though the comment states that s3 requires the path parameter, the code did not include s3 in its check - missing or wrong comment?
+  if member(['local', 'ftp'], $storage_type) {
     if !$path {
       fail("[Backup::Job::${name}]: Path parameter is required with storage_type => ${storage_type}")
     }
@@ -361,6 +369,21 @@ define backup::job (
     concat::fragment { "${_name}_s3":
       target  => "/etc/backup/models/${_name}.rb",
       content => template('backup/job/s3.erb'),
+      order   => '35',
+    }
+  }
+  } elsif $storage_type == 'ftp' {
+    # Template uses
+    # - $server_username
+    # - $server_password
+    # - $server_ip
+    # - $server_port
+    # - $server_passive_mode
+    # - $path
+    # - $keep
+    concat::fragment { "${_name}_ftp":
+      target  => "/etc/backup/models/${_name}.rb",
+      content => template('backup/job/ftp.erb'),
       order   => '35',
     }
   }
