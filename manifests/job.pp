@@ -371,7 +371,6 @@ define backup::job (
       content => template('backup/job/s3.erb'),
       order   => '35',
     }
-  }
   } elsif $storage_type == 'ftp' {
     # Template uses
     # - $server_username
