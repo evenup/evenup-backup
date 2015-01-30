@@ -1,0 +1,14 @@
+  ##
+  # FTP [Storage]
+  #
+  store_with FTP do |server|
+    server.username      = "<%= @storage_username -%>"
+    server.password      = "<%= @storage_password -%>"
+    server.ip            = "<%= @storage_host -%>"
+    server.port          = <%= @ftp_port %>
+    server.path          = "<%= @_path -%>"
+<% if @keep -%>
+    server.keep          = <%= @keep %>
+<% end -%>
+    server.passive_mode  = <%= @ftp_passive_mode %>
+  end

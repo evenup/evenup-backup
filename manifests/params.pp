@@ -19,7 +19,13 @@ class backup::params {
     }
     'Debian': {
       $package_dependencies = ['ruby-dev', 'libxslt1-dev', 'libxml2-dev', 'g++', 'patch']
-      if versioncmp($::lsbmajordistrelease, '12.04') < 1 {
+      if $::lsbmajordistrelease {
+        $releaseversion = $::lsbmajordistrelease
+      }
+      elsif $::lsbmajdistrelease {
+        $releaseversion = $::lsbmajdistrelease
+      }
+      if versioncmp($releaseversion, '12.04') < 1 {
         fail("${::operatingsystem} >= 14.04 is required")
       }
     }

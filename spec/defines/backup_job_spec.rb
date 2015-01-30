@@ -240,7 +240,85 @@ describe 'backup::job', :types=> :define do
         } }
         it { expect { is_expected.to compile }.to raise_error(/foo is an invalid region/) }
       end
-    end
+    end #s3
+
+    context 'ftp storage' do
+      context 'missing username' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+          :path             => '/there',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/storage_username is required/)}
+      end
+
+      context 'missing password' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_host     => 'mysite.example.com',
+          :path             => '/there',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/storage_password is required/)}
+      end
+
+      context 'missing host' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :path             => '/there',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/storage_host is required/)}
+      end
+
+      context 'bad port' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+          :ftp_port         => 'abcde',
+          :path             => '/there',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/ftp_port must be an integer/)}
+      end
+
+      context 'bad passive_mode' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+          :path             => '/there',
+          :ftp_passive_mode => 'bob',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/"bob" is not a boolean/)}
+      end
+
+      context 'missing path' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => 'here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/Path parameter is required/)}
+      end
+    end # ftp
 
     context 'encryptor generic' do
       context 'bad encryptor' do
@@ -783,6 +861,44 @@ describe 'backup::job', :types=> :define do
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.keep\s+=\s+3/) }
       end
     end #s3
+
+    context 'ftp' do
+      context 'minimum settings' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => '/here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+          :path             => '/there',
+        } }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.username\s+=\s"myuser"/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.password\s+=\s"secret"/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.ip\s+=\s"mysite.example.com"/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.port\s+=\s21$/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.path\s+=\s"\/there"/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.passive_mode\s+=\sfalse/) }
+      end
+
+      context 'all params' do
+        let(:params) { {
+          :types            => 'archive',
+          :add              => '/here',
+          :storage_type     => 'ftp',
+          :storage_username => 'myuser',
+          :storage_password => 'secret',
+          :storage_host     => 'mysite.example.com',
+          :path             => '/there',
+          :ftp_port         => 210,
+          :ftp_passive_mode => true,
+          :keep             => 10,
+        } }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.port\s+=\s210/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.keep\s+=\s10/) }
+        it { should contain_concat__fragment('job1_ftp').with(:content => /server\.passive_mode\s+=\strue/) }
+      end
+    end # ftp
 
     context 'email' do
       context 'minimal settings' do
