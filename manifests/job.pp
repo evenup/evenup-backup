@@ -41,13 +41,13 @@ define backup::job (
   $aws_secret_key   = undef,
   $bucket           = undef,
   $aws_region       = undef,
-  # Remote server common
-  $server_username  = undef,
-  $server_password  = undef,
-  $server_ip        = undef,
-  $server_port      = undef,
+  # Remote storage common
+  $storage_username = undef,
+  $storage_password = undef,
+  $storage_host     = undef,
   # FTP
-  $server_passive_mode = false,
+  $ftp_port         = 21,
+  $ftp_passive_mode = false,
 
   ## Encryptors
   $encryptor        = undef,
@@ -142,7 +142,7 @@ define backup::job (
 
   # Storage
   if !member(['s3', 'local', 'ftp'], $storage_type) {
-    fail("[Backup::Job::${name}]: Currently supported storage types are: s3 and local")
+    fail("[Backup::Job::${name}]: Currently supported storage types are: ftp, local, and s3")
   }
 
   if $keep and !is_integer($keep) {
@@ -153,9 +153,8 @@ define backup::job (
     fail("[Backup::Job::${name}]: If split_into is set it must be an integer")
   }
 
-  # s3 and local and ftp require path parameter
-  ## code review: even though the comment states that s3 requires the path parameter, the code did not include s3 in its check - missing or wrong comment?
-  if member(['local', 'ftp'], $storage_type) {
+  # local and ftp require path parameter
+  if member(['ftp', 'local'], $storage_type) {
     if !$path {
       fail("[Backup::Job::${name}]: Path parameter is required with storage_type => ${storage_type}")
     }
@@ -179,6 +178,26 @@ define backup::job (
       fail("[Backup::Job::${name}]: ${aws_region} is an invalid region")
     }
   } # S3
+
+  if $storage_type == 'ftp' {
+    if !$storage_username or !is_string($storage_username) {
+      fail("[Backup::Job::${name}]: Parameter storage_username is required for FTP storage")
+    }
+
+    if !$storage_password or !is_string($storage_password) {
+      fail("[Backup::Job::${name}]: Parameter storage_password is required for FTP storage")
+    }
+
+    if !$storage_host or !is_string($storage_host) {
+      fail("[Backup::Job::${name}]: Parameter storage_host is required for FTP storage")
+    }
+
+    if !$ftp_port or !is_integer($ftp_port) {
+      fail("[Backup::Job::${name}]: ftp_port must be an integer.  (Got: ${ftp_port})")
+    }
+
+    validate_bool($ftp_passive_mode)
+  }
 
   # Encryptor
   if $encryptor and !member(['openssl'], $encryptor) {
