@@ -13,7 +13,7 @@ class backup::params {
       $package_dependencies = ['ruby-devel', 'libxslt-devel', 'libxml2-devel', 'gcc-c++']
 
       # Ruby 1.9.3 is needed for backup
-      if versioncmp($::lsbmajordistrelease, '6') < 1 {
+      if versioncmp($::operatingsystemmajrelease, '6') < 1 {
         fail("${::operatingsystem} >= 7 is required")
       }
     }

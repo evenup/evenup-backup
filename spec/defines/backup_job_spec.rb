@@ -6,10 +6,11 @@ describe 'backup::job', :types=> :define do
     :fqdn => 'testhost.foo.com',
     :domain => 'foo.com',
     :osfamily => 'RedHat',
-    :lsbmajordistrelease => '7',
+    :operatingsystemmajrelease => '7',
     :id => 'root',
     :path => '/bin:/sbin:/usr/sbin:/usr/bin',
-    :kernel => 'Linux'
+    :kernel => 'Linux',
+    :is_pe => false,
   } }
   let(:pre_condition) { 'include backup' }
   let(:title) { 'job1' }
