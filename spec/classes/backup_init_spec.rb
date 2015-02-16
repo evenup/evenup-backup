@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'backup', :type => :class do
-  let(:facts) { { :hostname => 'test.mydomain.com', :osfamily => 'RedHat', :lsbmajordistrelease => '7' } }
+  let(:facts) { { :hostname => 'test.mydomain.com', :osfamily => 'RedHat', :operatingsystemmajrelease => '7' } }
 
   describe "class with default parameters" do
 
