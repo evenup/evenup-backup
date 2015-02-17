@@ -33,4 +33,51 @@ class backup::params {
       fail("${::osfamily} not supported by backups")
     }
   }
+
+  ## Storage options
+  # Common options
+  $storage_type         = undef
+  $keep                 = undef
+  $split_into           = undef
+  $path                 = undef
+  # S3
+  $aws_access_key       = undef
+  $aws_secret_key       = undef
+  $bucket               = undef
+  $aws_region           = undef
+  # Remote storage common
+  $storage_username     = undef
+  $storage_password     = undef
+  $storage_host         = undef
+  # FTP
+  $ftp_port             = 21
+  $ftp_passive_mode     = false
+
+  ## Encryptors
+  $encryptor            = undef
+  # OpenSSL
+  $openssl_password     = undef
+
+  ## Compressors
+  $compressor           = undef
+  $level                = undef
+
+  ## Notifiers
+  # Email
+  $enable_email         = false
+  $email_success        = false
+  $email_warning        = true
+  $email_failure        = true
+  $email_from           = undef
+  $email_to             = undef
+  $relay_host           = 'localhost'
+  $relay_port           = '25'
+  # Hipchat
+  $enable_hc            = false
+  $hc_success           = false
+  $hc_warning           = true
+  $hc_failure           = true
+  $hc_token             = undef
+  $hc_from              = 'Backup'
+  $hc_notify            = []
 }
