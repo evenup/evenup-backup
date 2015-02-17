@@ -8,6 +8,7 @@ fi
 # Clone the repo
 if [ -d backup ] ; then
   cd backup
+  git checkout -- lib/backup.rb
   git fetch
 else
   git clone https://github.com/meskyanichi/backup.git
@@ -18,11 +19,9 @@ git checkout $1
 
 # Set up bundler
 sed -i "3i $: << File.join(File.dirname(__FILE__), '..',  \"lib\")" lib/backup.rb
-#sed -i "6i require 'bundler/setup'" lib/backup.rb
 
 # Bundle
 bundle install --standalone
-#bundle install --binstubs=/usr/local/bin --standalone
 cd ..
 
 mkdir tmp
@@ -31,8 +30,9 @@ echo "cat > /usr/local/bin/backup <<EOF" > tmp/install_bin.sh
 echo "#!/usr/bin/env ruby" >> tmp/install_bin.sh
 echo "# encoding: utf-8" >> tmp/install_bin.sh
 echo "" >> tmp/install_bin.sh
-echo "require File.expand_path(\"/opt/backup/lib/backup\", __FILE__)" >> tmp/install_bin.sh
-echo "Backup::CLI.start" >> tmp/install_bin.sh
+echo "$:.unshift File.expand_path '/opt/backup/bundle', __FILE__" >> tmp/install_bin.sh
+echo "require 'bundler/setup'" >> tmp/install_bin.sh
+echo "load File.expand_path '/opt/backup/bin/backup', __FILE__" >> tmp/install_bin.sh
 echo "EOF" >> tmp/install_bin.sh
 echo "" >> tmp/install_bin.sh
 echo "chmod 0555 /usr/local/bin/backup" >> tmp/install_bin.sh
