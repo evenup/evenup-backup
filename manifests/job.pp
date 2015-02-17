@@ -32,50 +32,50 @@ define backup::job (
 
   ## Storage options
   # Common options
-  $storage_type     = undef,
-  $keep             = undef,
-  $split_into       = undef,
-  $path             = undef,
+  $storage_type     = $::backup::storage_type,
+  $keep             = $::backup::keep,
+  $split_into       = $::backup::split_into,
+  $path             = $::backup::path,
   # S3
-  $aws_access_key   = undef,
-  $aws_secret_key   = undef,
-  $bucket           = undef,
-  $aws_region       = undef,
+  $aws_access_key   = $::backup::aws_access_key,
+  $aws_secret_key   = $::backup::aws_secret_key,
+  $bucket           = $::backup::bucket,
+  $aws_region       = $::backup::aws_region,
   # Remote storage common
-  $storage_username = undef,
-  $storage_password = undef,
-  $storage_host     = undef,
+  $storage_username = $::backup::storage_username,
+  $storage_password = $::backup::storage_password,
+  $storage_host     = $::backup::storage_host,
   # FTP
-  $ftp_port         = 21,
-  $ftp_passive_mode = false,
+  $ftp_port         = $::backup::ftp_port,
+  $ftp_passive_mode = $::backup::ftp_passive_mode,
 
   ## Encryptors
-  $encryptor        = undef,
+  $encryptor        = $::backup::encryptor,
   # OpenSSL
-  $openssl_password = undef,
+  $openssl_password = $::backup::openssl_password,
 
   ## Compressors
-  $compressor       = undef,
-  $level            = undef,
+  $compressor       = $::backup::compressor,
+  $level            = $::backup::level,
 
   ## Notifiers
   # Email
-  $enable_email     = false,
-  $email_success    = false,
-  $email_warning    = true,
-  $email_failure    = true,
-  $email_from       = undef,
-  $email_to         = undef,
-  $relay_host       = 'localhost',
-  $relay_port       = '25',
+  $enable_email     = $::backup::enable_email,
+  $email_success    = $::backup::email_success,
+  $email_warning    = $::backup::email_warning,
+  $email_failure    = $::backup::email_failure,
+  $email_from       = $::backup::email_from,
+  $email_to         = $::backup::email_to,
+  $relay_host       = $::backup::relay_host,
+  $relay_port       = $::backup::relay_port,
   # Hipchat
-  $enable_hc        = false,
-  $hc_success       = false,
-  $hc_warning       = true,
-  $hc_failure       = true,
-  $hc_token         = undef,
-  $hc_from          = 'Backup',
-  $hc_notify        = [],
+  $enable_hc        = $::backup::enable_hc,
+  $hc_success       = $::backup::hc_success,
+  $hc_warning       = $::backup::hc_warning,
+  $hc_failure       = $::backup::hc_failure,
+  $hc_token         = $::backup::hc_token,
+  $hc_from          = $::backup::hc_from,
+  $hc_notify        = $::backup::hc_notify,
 ){
 
   if ! defined(Class['backup']) {
