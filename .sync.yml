@@ -37,6 +37,6 @@
         env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES="yes"
     hc_secure: "CK11caPkzorkB4onwQPDolAFM32RO+Mn/rt3MRBe0xkt+SyRj8Icmv4MLbWUhiIydZQLrZpC+k993U9RuNOgghOcBq9tKF3U1sM6rrWLNJOnvobi6S+WZYe325IcsMchREERd0TUJYeYWCw2YxYlJBS/xRmpXO5gLZAPzm1NI9k="
   spec/acceptance/nodesets/centos-65-x64.yml:
-    delete: true
+    unmanaged: true
   spec/acceptance/nodesets/ubuntu-server-1204-x64.yml:
-    delete: true
+    unmanaged: true
