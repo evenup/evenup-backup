@@ -67,7 +67,7 @@ class backup (
   $hc_notify            = $::backup::params::hc_notify,
   ) inherits backup::params {
 
-  class { 'backup::install': } ~>
-  class { 'backup::config': }
+  class { '::backup::install': } ~>
+  class { '::backup::config': }
 
 }
