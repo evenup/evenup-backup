@@ -731,7 +731,7 @@ describe 'backup::job', :types=> :define do
           :storage_type   => 'local',
           :path           => '/backups'
         } }
-        it { should contain_concat__fragment('job1_riak').with(:content => /db\.node\s+=\s+"nosql@host\.internal"/) }
+        it { should contain_concat__fragment('job1_riak').with(:content => /db\.node\s+=\s+"nosql\@host\.internal"/) }
         it { should contain_concat__fragment('job1_riak').with(:content => /db\.cookie\s+=\s+"supersecret"/) }
       end
     end # riak

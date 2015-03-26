@@ -450,6 +450,6 @@ define backup::job (
     hour     => $hour,
     monthday => $monthday,
     month    => $month,
-    weekday  => $weekday
+    weekday  => $weekday,
   }
 }
