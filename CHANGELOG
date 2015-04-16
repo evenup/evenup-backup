@@ -1,3 +1,5 @@
+20150416 - v0.4.0
+  Add redis database support
 20150217 - v0.3.0
   Add job params to class for defaults
 20150216 - v0.2.1

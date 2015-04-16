@@ -232,6 +232,12 @@ String.  Cookie to be used for riak backups
 
 Default: riak
 
+#####`rdb_path`
+
+String.  Path to the redis database
+
+Default: /var/lib/redis/dump.rdb
+
 ##### `storage_type`
 
 String. Type of storage to use for the backup archive
