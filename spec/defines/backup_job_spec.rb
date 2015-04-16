@@ -736,6 +736,27 @@ describe 'backup::job', :types=> :define do
       end
     end # riak
 
+    context 'redis' do
+      context 'default params' do
+        let(:params) { {
+          :types        => 'redis',
+          :storage_type => 'local',
+          :path         => '/backups'
+        } }
+        it { should contain_concat__fragment('job1_redis').with(:content => /db\.rdb_path\s+=\s+"\/var\/lib\/redis\/dump.rdb"/) }
+      end
+
+      context 'set params' do
+        let(:params) { {
+          :types        => 'redis',
+          :rdb_path     => '/redis/dump.rdb',
+          :storage_type => 'local',
+          :path         => '/backups'
+        } }
+        it { should contain_concat__fragment('job1_redis').with(:content => /db\.rdb_path\s+=\s+"\/redis\/dump.rdb"/) }
+      end
+    end
+
     context 'compressors' do
       context 'bzip2' do
         let(:params) { {
