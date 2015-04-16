@@ -29,6 +29,8 @@ define backup::job (
   # Riak
   $node             = "riak@${::fqdn}",
   $cookie           = 'riak',
+  # Redis
+  $rdb_path         = '/var/lib/redis/dump.rdb',
 
   ## Storage options
   # Common options
@@ -97,7 +99,7 @@ define backup::job (
     fail("[Backup::Job::${name}]: Utility paths need to be a hash: {'utility_name' => 'path'}")
   }
 
-  if !member(['archive', 'mongodb', 'riak'], $_types) {
+  if !member(['archive', 'mongodb', 'riak', 'redis'], $_types) {
     $__types = join($_types, ', ')
     fail("[Backup::Job::${name}]: Invalid types in '${__types}'.  Supported types are archive, mongodb, and riak")
   }
@@ -326,6 +328,14 @@ define backup::job (
     concat::fragment { "${_name}_riak":
       target  => "/etc/backup/models/${_name}.rb",
       content => template('backup/job/riak.erb'),
+      order   => '12',
+    }
+  }
+
+  if member($_types, 'redis') {
+    concat::fragment { "${_name}_redis":
+      target  => "/etc/backup/models/${_name}.rb",
+      content => template('backup/job/redis.erb'),
       order   => '12',
     }
   }
