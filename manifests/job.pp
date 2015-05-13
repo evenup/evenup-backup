@@ -12,6 +12,7 @@ define backup::job (
   $weekday          = '*',
   $ensure           = 'present',
   $utilities        = undef,
+  $tmp_path         = '~/Backup/.tmp',
 
   ## Backup types
   # Archive
@@ -455,7 +456,7 @@ define backup::job (
 
   cron { "${name}-backup":
     ensure   => $ensure,
-    command  => "/usr/local/bin/backup perform --trigger ${_name} --config-file '/etc/backup/config.rb'",
+    command  => "/usr/local/bin/backup perform --trigger ${_name} --config-file '/etc/backup/config.rb' --tmp-path ${tmp_path}",
     minute   => $minute,
     hour     => $hour,
     monthday => $monthday,
