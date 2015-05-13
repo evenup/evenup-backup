@@ -1,3 +1,4 @@
+  Add ability to set tmp-path
 20150416 - v0.4.0
   Add redis database support
 20150217 - v0.3.0

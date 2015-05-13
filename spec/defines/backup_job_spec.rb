@@ -986,4 +986,27 @@ describe 'backup::job', :types=> :define do
     end
   end
 
+  context 'cron entry' do
+    context 'default' do
+      let(:params) { {
+        :types          => 'archive',
+        :add            => '/here',
+        :storage_type   => 'local',
+        :path           => '/backups'
+      } }
+      it { should contain_cron('job1-backup').with(:command => '/usr/local/bin/backup perform --trigger job1 --config-file \'/etc/backup/config.rb\' --tmp-path ~/Backup/.tmp') }
+    end # default
+
+    context 'set tmp-path' do
+      let(:params) { {
+        :tmp_path       => '/tmp',
+        :types          => 'archive',
+        :add            => '/here',
+        :storage_type   => 'local',
+        :path           => '/backups'
+      } }
+      it { should contain_cron('job1-backup').with(:command => '/usr/local/bin/backup perform --trigger job1 --config-file \'/etc/backup/config.rb\' --tmp-path /tmp') }
+    end #set tmp-path
+  end # cron entry
+
 end
