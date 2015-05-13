@@ -176,9 +176,15 @@ String.  Whether or not the job should be present
 
 Default: present
 
-##### `utilities`
+#####`utilities`
 
 Hash.  Commands and paths provided as key:value pairs to the location of utility commands if not available in the default path
+
+#####`tmp_path`
+
+String.  Set the tmp-path for a backup job run
+
+Default: ~/Backup/.tmp
 
 ##### `add`
 
