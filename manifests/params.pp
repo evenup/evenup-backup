@@ -62,6 +62,22 @@ class backup::params {
   $compressor           = undef
   $level                = undef
 
+  ## Logging
+  # Console
+  $console_quiet        = false
+  # File
+  $logfile_enabled      = false
+  $logfile_path         = 'log'
+  $logfile_max_byotes   = '500_000'
+  # Syslog
+  $syslog_enabled       = false
+  $syslog_ident         = 'backup'
+  $syslog_options       = 'Syslog::LOG_PID'
+  $syslog_facility      = 'Syslog::LOG_LOCAL0'
+  $syslog_info          = 'Syslog::LOG_INFO'
+  $syslog_warn          = 'Syslog::LOG_WARNING'
+  $syslog_error         = 'Syslog::LOG_ERR'
+
   ## Notifiers
   # Email
   $enable_email         = false

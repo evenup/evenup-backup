@@ -1,0 +1,21 @@
+  ##
+  # Logger [Logging]
+  #
+  Logger.configure do
+    # Console options:
+    console.quiet = <%= @console_quiet %>
+
+    # Logfile options:
+    logfile.enabled   = <%= @logfile_enabled %>
+    logfile.log_path  = '<%= @logfile_path %>'
+    logfile.max_bytes = <%= @logfile_max_bytes %>
+
+    # Syslog options:
+    syslog.enabled  = <%= @syslog_enabled %>
+    syslog.ident    = '<%= @syslog_ident %>'
+    syslog.options  = <%= @syslog_options %>
+    syslog.facility = <%= @syslog_facility %>
+    syslog.info     = <%= @syslog_info %>
+    syslog.warn     = <%= @syslog_warn %>
+    syslog.error    = <%= @syslog_error %>
+  end
