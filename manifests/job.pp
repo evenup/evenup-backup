@@ -4,81 +4,97 @@
 #
 define backup::job (
   $types,
-  $description      = undef,
-  $hour             = '23',
-  $minute           = '05',
-  $monthday         = '*',
-  $month            = '*',
-  $weekday          = '*',
-  $ensure           = 'present',
-  $utilities        = undef,
-  $tmp_path         = '~/Backup/.tmp',
+  $description       = undef,
+  $hour              = '23',
+  $minute            = '05',
+  $monthday          = '*',
+  $month             = '*',
+  $weekday           = '*',
+  $ensure            = 'present',
+  $utilities         = undef,
+  $tmp_path          = '~/Backup/.tmp',
 
   ## Backup types
   # Archive
-  $add              = undef,
-  $exclude          = undef,
+  $add               = undef,
+  $exclude           = undef,
   # Multiple databases
-  $dbname           = undef,
-  $host             = 'localhost',
-  $username         = undef,
-  $password         = undef,
-  $port             = undef,
+  $dbname            = undef,
+  $host              = 'localhost',
+  $username          = undef,
+  $password          = undef,
+  $port              = undef,
   # MongoDB
-  $collections      = undef,
-  $lock             = false,
+  $collections       = undef,
+  $lock              = false,
   # Riak
-  $node             = "riak@${::fqdn}",
-  $cookie           = 'riak',
+  $node              = "riak@${::fqdn}",
+  $cookie            = 'riak',
   # Redis
-  $rdb_path         = '/var/lib/redis/dump.rdb',
+  $rdb_path          = '/var/lib/redis/dump.rdb',
 
   ## Storage options
   # Common options
-  $storage_type     = $::backup::storage_type,
-  $keep             = $::backup::keep,
-  $split_into       = $::backup::split_into,
-  $path             = $::backup::path,
+  $storage_type      = $::backup::storage_type,
+  $keep              = $::backup::keep,
+  $split_into        = $::backup::split_into,
+  $path              = $::backup::path,
   # S3
-  $aws_access_key   = $::backup::aws_access_key,
-  $aws_secret_key   = $::backup::aws_secret_key,
-  $bucket           = $::backup::bucket,
-  $aws_region       = $::backup::aws_region,
+  $aws_access_key    = $::backup::aws_access_key,
+  $aws_secret_key    = $::backup::aws_secret_key,
+  $bucket            = $::backup::bucket,
+  $aws_region        = $::backup::aws_region,
   # Remote storage common
-  $storage_username = $::backup::storage_username,
-  $storage_password = $::backup::storage_password,
-  $storage_host     = $::backup::storage_host,
+  $storage_username  = $::backup::storage_username,
+  $storage_password  = $::backup::storage_password,
+  $storage_host      = $::backup::storage_host,
   # FTP
-  $ftp_port         = $::backup::ftp_port,
-  $ftp_passive_mode = $::backup::ftp_passive_mode,
+  $ftp_port          = $::backup::ftp_port,
+  $ftp_passive_mode  = $::backup::ftp_passive_mode,
 
   ## Encryptors
-  $encryptor        = $::backup::encryptor,
+  $encryptor         = $::backup::encryptor,
   # OpenSSL
-  $openssl_password = $::backup::openssl_password,
+  $openssl_password  = $::backup::openssl_password,
 
   ## Compressors
-  $compressor       = $::backup::compressor,
-  $level            = $::backup::level,
+  $compressor        = $::backup::compressor,
+  $level             = $::backup::level,
+
+  ## Logging
+  # Console
+  $console_quiet     = $::backup::console_quiet,
+  # File
+  $logfile_enabled   = $::backup::logfile_enabled,
+  $logfile_path      = $::backup::logfile_path,
+  $logfile_max_bytes = $::backup::logfile_max_bytes,
+  # Syslog
+  $syslog_enabled    = $::backup::syslog_enabled,
+  $syslog_ident      = $::backup::syslog_ident,
+  $syslog_options    = $::backup::syslog_options,
+  $syslog_facility   = $::backup::syslog_facility,
+  $syslog_info       = $::backup::syslog_info,
+  $syslog_warn       = $::backup::syslog_warn,
+  $syslog_error      = $::backup::syslog_error,
 
   ## Notifiers
   # Email
-  $enable_email     = $::backup::enable_email,
-  $email_success    = $::backup::email_success,
-  $email_warning    = $::backup::email_warning,
-  $email_failure    = $::backup::email_failure,
-  $email_from       = $::backup::email_from,
-  $email_to         = $::backup::email_to,
-  $relay_host       = $::backup::relay_host,
-  $relay_port       = $::backup::relay_port,
+  $enable_email      = $::backup::enable_email,
+  $email_success     = $::backup::email_success,
+  $email_warning     = $::backup::email_warning,
+  $email_failure     = $::backup::email_failure,
+  $email_from        = $::backup::email_from,
+  $email_to          = $::backup::email_to,
+  $relay_host        = $::backup::relay_host,
+  $relay_port        = $::backup::relay_port,
   # Hipchat
-  $enable_hc        = $::backup::enable_hc,
-  $hc_success       = $::backup::hc_success,
-  $hc_warning       = $::backup::hc_warning,
-  $hc_failure       = $::backup::hc_failure,
-  $hc_token         = $::backup::hc_token,
-  $hc_from          = $::backup::hc_from,
-  $hc_notify        = $::backup::hc_notify,
+  $enable_hc         = $::backup::enable_hc,
+  $hc_success        = $::backup::hc_success,
+  $hc_warning        = $::backup::hc_warning,
+  $hc_failure        = $::backup::hc_failure,
+  $hc_token          = $::backup::hc_token,
+  $hc_from           = $::backup::hc_from,
+  $hc_notify         = $::backup::hc_notify,
 ){
 
   if ! defined(Class['backup']) {
@@ -415,6 +431,27 @@ define backup::job (
       content => template('backup/job/ftp.erb'),
       order   => '35',
     }
+  }
+
+  if $logfile_enabled or $syslog_enabled or $console_quiet {
+    # Template uses
+    # - $console_quiet
+    # - $logfile_enabled
+    # - $logfile_path
+    # - $logfile_max_byotes
+    # - $syslog_enabled
+    # - $syslog_ident
+    # - $syslog_options
+    # - $syslog_facility
+    # - $syslog_info
+    # - $syslog_warn
+    # - $syslog_error
+    concat::fragment { "${_name}_logging":
+    target  => "/etc/backup/models/${_name}.rb",
+    content => template('backup/job/logging.erb'),
+    order   => '45',
+    }
+
   }
 
   if $enable_email {

@@ -47,6 +47,22 @@ class backup (
   $compressor           = $::backup::params::compressor,
   $level                = $::backup::params::level,
 
+  ## Logging
+  # Console
+  $console_quiet        = $::backup::params::console_quiet,
+  # File
+  $logfile_enabled      = $::backup::params::logfile_enabled,
+  $logfile_path         = $::backup::params::logfile_path,
+  $logfile_max_byotes   = $::backup::params::logfile_max_bytes,
+  # Syslog
+  $syslog_enabled       = $::backup::params::syslog_enabled,
+  $syslog_ident         = $::backup::params::syslog_ident,
+  $syslog_options       = $::backup::params::syslog_options,
+  $syslog_facility      = $::backup::params::syslog_facility,
+  $syslog_info          = $::backup::params::syslog_info,
+  $syslog_warn          = $::backup::params::syslog_warn,
+  $syslog_error         = $::backup::params::syslog_error,
+
   ## Notifiers
   # Email
   $enable_email         = $::backup::params::enable_email,

@@ -922,6 +922,34 @@ describe 'backup::job', :types=> :define do
       end
     end # ftp
 
+    context 'logging' do
+      context 'no logging' do
+        let(:params) { {
+          :types          => 'archive',
+          :add            => '/here',
+          :storage_type   => 'local',
+          :path           => '/backups'
+        } }
+        it { should_not contain_concat__fragment('job1_logging') }
+      end
+
+      context 'logging enabled' do
+        let(:params) { {
+          :types           => 'archive',
+          :add             => '/here',
+          :storage_type    => 'local',
+          :path            => '/backups',
+          :console_quiet   => true,
+          :logfile_enabled => true,
+          :syslog_enabled  => true
+        } }
+
+        it { should contain_concat__fragment('job1_logging').with(:content => /console\.quiet\s+=\strue/) }
+        it { should contain_concat__fragment('job1_logging').with(:content => /logfile\.enabled\s+=\strue/) }
+        it { should contain_concat__fragment('job1_logging').with(:content => /syslog\.enabled\s+=\strue/) }
+      end
+    end
+
     context 'email' do
       context 'minimal settings' do
         let(:params) { {
