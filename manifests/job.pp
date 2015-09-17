@@ -438,7 +438,7 @@ define backup::job (
     # - $console_quiet
     # - $logfile_enabled
     # - $logfile_path
-    # - $logfile_max_byotes
+    # - $logfile_max_bytes
     # - $syslog_enabled
     # - $syslog_ident
     # - $syslog_options

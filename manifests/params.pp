@@ -68,7 +68,7 @@ class backup::params {
   # File
   $logfile_enabled      = false
   $logfile_path         = 'log'
-  $logfile_max_byotes   = '500_000'
+  $logfile_max_bytes    = '500_000'
   # Syslog
   $syslog_enabled       = false
   $syslog_ident         = 'backup'

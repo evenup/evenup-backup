@@ -53,7 +53,7 @@ class backup (
   # File
   $logfile_enabled      = $::backup::params::logfile_enabled,
   $logfile_path         = $::backup::params::logfile_path,
-  $logfile_max_byotes   = $::backup::params::logfile_max_bytes,
+  $logfile_max_bytes    = $::backup::params::logfile_max_bytes,
   # Syslog
   $syslog_enabled       = $::backup::params::syslog_enabled,
   $syslog_ident         = $::backup::params::syslog_ident,
