@@ -1,6 +1,6 @@
 {
   "name": "evenup-backup",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Justin Lambert <jlambert@letsevenup.com>",
   "license": "Apache-2.0",
   "summary": "Manages backups",
