@@ -755,7 +755,28 @@ describe 'backup::job', :types=> :define do
         } }
         it { should contain_concat__fragment('job1_redis').with(:content => /db\.rdb_path\s+=\s+"\/redis\/dump.rdb"/) }
       end
-    end
+    end #riak
+
+    context 'before' do
+      let(:params) { {
+        :types        => 'redis',
+        :storage_type => 'local',
+        :path         => '/backups',
+        :before_job   => 'system "systemctl stop bind"'
+      } }
+      it { should contain_concat__fragment('job1_before').with(:content => /system "systemctl stop bind"/)}
+    end # before
+
+    context 'after' do
+      let(:params) { {
+        :types        => 'redis',
+        :storage_type => 'local',
+        :path         => '/backups',
+        :after_job    => ['system "touch /var/log/bind.log"', 'system "systemctl start bind"']
+      } }
+      it { should contain_concat__fragment('job1_after').with(:content => /system "touch \/var\/log\/bind.log"/)}
+      it { should contain_concat__fragment('job1_after').with(:content => /system "systemctl start bind"/)}
+    end # after
 
     context 'compressors' do
       context 'bzip2' do

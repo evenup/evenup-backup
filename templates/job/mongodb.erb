@@ -2,17 +2,17 @@
   # MongoDB [Database]
   #
   database MongoDB do |db|
-    db.name     = "<%= dbname %>"
+    db.name     = "<%= @dbname %>"
 <%  if @username -%>
-    db.username = "<%= username %>"
-    db.password = "<%= password %>"
+    db.username = "<%= @username %>"
+    db.password = "<%= @password %>"
 <%  end -%>
-    db.host     = "<%= host %>"
+    db.host     = "<%= @host %>"
 <% if @port -%>
-    db.port     = "<%= port %>"
+    db.port     = "<%= @port %>"
 <%  end -%>
 <% if @lock -%>
-    db.lock     = <%= lock %>
+    db.lock     = <%= @lock %>
 <%  end -%>
 <% if @collections -%>
 <%    _collections = Array(@collections) -%>
