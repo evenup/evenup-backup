@@ -13,6 +13,8 @@ define backup::job (
   $ensure            = 'present',
   $utilities         = undef,
   $tmp_path          = '~/Backup/.tmp',
+  $before_job        = undef,
+  $after_job         = undef,
 
   ## Backup types
   # Archive
@@ -317,6 +319,16 @@ define backup::job (
     }
   }
 
+  if $before_job {
+    # Template uses
+    # - $before_job
+    concat::fragment { "${_name}_before":
+      target  => "/etc/backup/models/${_name}.rb",
+      content => template('backup/job/before.erb'),
+      order   => '06',
+    }
+  }
+
   if member($_types, 'archive') {
     # Template uses
     # - $add
@@ -482,6 +494,16 @@ define backup::job (
       target  => "/etc/backup/models/${_name}.rb",
       content => template('backup/job/hipchat.erb'),
       order   => '51',
+    }
+  }
+
+  if $after_job {
+    # Template uses
+    # - $after_job
+    concat::fragment { "${_name}_after":
+      target  => "/etc/backup/models/${_name}.rb",
+      content => template('backup/job/after.erb'),
+      order   => '06',
     }
   }
 
