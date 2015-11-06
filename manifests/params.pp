@@ -45,6 +45,7 @@ class backup::params {
   $aws_secret_key       = undef
   $bucket               = undef
   $aws_region           = undef
+  $reduced_redundancy   = false
   # Remote storage common
   $storage_username     = undef
   $storage_password     = undef

@@ -12,4 +12,7 @@
 <% if @keep -%>
     s3.keep              = <%= @keep -%>
 <% end -%>
+<% if @reduced_redundancy -%>
+    s3.storage_class     = :reduced_redundancy
+<% end -%>
   end

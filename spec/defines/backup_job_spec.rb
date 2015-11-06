@@ -241,6 +241,19 @@ describe 'backup::job', :types=> :define do
         } }
         it { expect { is_expected.to compile }.to raise_error(/foo is an invalid region/) }
       end
+
+      context 'bad reduced_redundancy s3 setting' do
+        let(:params) { {
+          :types          => 'archive',
+          :add            => '/here',
+          :storage_type   => 's3',
+          :aws_access_key => 'foo',
+          :aws_secret_key => 'foo',
+          :reduced_redundancy => 'foo'
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/boolean/) }
+      end
+
     end #s3
 
     context 'ftp storage' do
@@ -883,6 +896,7 @@ describe 'backup::job', :types=> :define do
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.bucket\s+=\s+"bucket"/) }
         it { should_not contain_concat__fragment('job1_s3').with(:content => /s3\.region/) }
         it { should_not contain_concat__fragment('job1_s3').with(:content => /s3\.keep/) }
+        it { should_not contain_concat__fragment('job1_s3').with(:content => /s3\.storage_class/) }
       end
 
       context 'all params' do
@@ -894,7 +908,8 @@ describe 'backup::job', :types=> :define do
           :aws_secret_key   => 'bar',
           :bucket           => 'bucket',
           :aws_region       => 'us-east-1',
-          :keep             => 3
+          :keep             => 3,
+          :reduced_redundancy => true
         } }
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.access_key_id\s+=\s+"foo"/) }
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.secret_access_key\s+=\s+"bar"/) }
@@ -902,6 +917,7 @@ describe 'backup::job', :types=> :define do
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.bucket\s+=\s+"bucket"/) }
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.region\s+=\s+"us-east-1"/) }
         it { should contain_concat__fragment('job1_s3').with(:content => /s3\.keep\s+=\s+3/) }
+        it { should contain_concat__fragment('job1_s3').with(:content => /s3\.storage_class\s+=\s+:reduced_redundancy/) }
       end
     end #s3
 
