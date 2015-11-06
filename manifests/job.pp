@@ -195,7 +195,17 @@ define backup::job (
       fail("[Backup::Job::${name}]: S3 bucket must be specified")
     }
 
-    if $aws_region and !member(['us-east-1', 'us-west-2', 'us-west-1', 'eu-west-1', 'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'sa-east-1'], $aws_region ) {
+    if $aws_region and !member([
+      'us-east-1',
+      'us-west-2',
+      'us-west-1',
+      'eu-west-1',
+      'eu-central-1',
+      'ap-southeast-1',
+      'ap-southeast-2',
+      'ap-northeast-1',
+      'sa-east-1',
+    ], $aws_region ) {
       fail("[Backup::Job::${name}]: ${aws_region} is an invalid region")
     }
   } # S3
