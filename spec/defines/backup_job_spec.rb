@@ -102,8 +102,10 @@ describe 'backup::job', :types=> :define do
         } }
         it { expect { is_expected.to compile }.to raise_error(/Invalid port \(foo\)/) }
       end
+    end
 
-      context 'database without name' do
+    context 'mongodb' do
+      context 'mongo database without name' do
         let(:params) { {
           :types          => 'mongodb',
           :storage_type   => 'local',
@@ -112,7 +114,7 @@ describe 'backup::job', :types=> :define do
         it { expect { is_expected.to compile }.to raise_error(/dbname is required with this database type/) }
       end
 
-      context 'database username without password' do
+      context 'mongodb username without password' do
         let(:params) { {
           :types          => 'mongodb',
           :dbname         => 'foo',
@@ -122,9 +124,7 @@ describe 'backup::job', :types=> :define do
         } }
         it { expect { is_expected.to compile }.to raise_error(/Database password is required with username/) }
       end
-    end
 
-    context 'mongodb' do
       context 'mongodb with bad collections' do
         let(:params) { {
           :types          => 'mongodb',
@@ -147,6 +147,18 @@ describe 'backup::job', :types=> :define do
         it { expect { is_expected.to compile }.to raise_error(/boolean/) }
       end
     end # mongodb
+
+    context 'mysql' do
+      context 'mysql with bad skipped tables' do
+        let(:params) { {
+          :types          => 'mysql',
+          :skip_tables    => { 'a' => 'b' },
+          :storage_type   => 'local',
+          :path           => '/backups'
+        } }
+        it { expect { is_expected.to compile }.to raise_error(/Tables to skip in backup for MySQL must be a string or array if defined/) }
+      end
+    end # mysql
 
     context 'generic storage' do
       context 'bad storage type' do
@@ -711,6 +723,49 @@ describe 'backup::job', :types=> :define do
         it { should contain_concat__fragment('job1_mongodb').with(:content => /db\.only_collections\s+=\s+\['a', 'b', 'c', 'd'\]/) }
       end
     end #mongodb
+
+    context 'mysql' do
+      context 'minimal configuration' do
+        let(:params) { {
+          :types          => 'mysql',
+          :storage_type   => 'local',
+          :path           => '/backups'
+        } }
+        it { should_not contain_concat__fragment('job1_mysql').with(:content => /db.name/) }
+        it { should_not contain_concat__fragment('job1_mysql').with(:content => /db\.username/) }
+        it { should_not contain_concat__fragment('job1_mysql').with(:content => /db\.password/) }
+        it { should_not contain_concat__fragment('job1_mysql').with(:content => /db\.port/) }
+        it { should_not contain_concat__fragment('job1_mysql').with(:content => /db\.skip_tables/) }
+      end
+      context 'with u:p, host, port, skipped table as string' do
+        let(:params) { {
+          :types          => 'mysql',
+          :dbname         => 'mydb',
+          :username       => 'myuser',
+          :password       => 'mypass',
+          :port           => 1234,
+          :skip_tables    => 'log_table',
+          :storage_type   => 'local',
+          :path           => '/backups'
+        } }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.name\s+=\s+"mydb"/) }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.host\s+=\s+"localhost"/) }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.username\s+=\s+"myuser"/) }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.password\s+=\s+"mypass"/) }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.port\s+=\s+"1234"/) }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.skip_tables\s+=\s+\['log_table'\]/) }
+      end
+
+      context 'array of skipped tables' do
+        let(:params) { {
+          :types          => 'mysql',
+          :skip_tables    => ['log_table', 'temp_table'],
+          :storage_type   => 'local',
+          :path           => '/backups'
+        } }
+        it { should contain_concat__fragment('job1_mysql').with(:content => /db\.skip_tables\s+=\s+\['log_table', 'temp_table'\]/) }
+      end
+    end # mysql
 
     context 'riak' do
       context 'default node and cookie' do

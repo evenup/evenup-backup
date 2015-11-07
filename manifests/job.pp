@@ -34,6 +34,8 @@ define backup::job (
   $cookie            = 'riak',
   # Redis
   $rdb_path          = '/var/lib/redis/dump.rdb',
+  # MySQL
+  $skip_tables       = undef,
 
   ## Storage options
   # Common options
@@ -118,9 +120,9 @@ define backup::job (
     fail("[Backup::Job::${name}]: Utility paths need to be a hash: {'utility_name' => 'path'}")
   }
 
-  if !member(['archive', 'mongodb', 'riak', 'redis'], $_types) {
+  if !member(['archive', 'mongodb', 'mysql', 'riak', 'redis'], $_types) {
     $__types = join($_types, ', ')
-    fail("[Backup::Job::${name}]: Invalid types in '${__types}'.  Supported types are archive, mongodb, and riak")
+    fail("[Backup::Job::${name}]: Invalid types in '${__types}'.  Supported types are archive, mongodb, mysql, riak and redis")
   }
 
   # Validate archive specific things
@@ -137,29 +139,35 @@ define backup::job (
   } # Archive
 
   # Validate database specific things
-  if member($_types, 'mongodb') {
+  if !empty(intersection($_types, ['mongodb', 'mysql'])) {
     if $port and !is_integer($port) {
       fail("[Backup::Job::${name}]: Invalid port (${port})")
     }
   }
 
-  # Currently only mongo needs these, but other DB types will so breaking it out
+  # MongoDB
   if member($_types, 'mongodb') {
+    # Other databases allow omitting database name
     if !$dbname {
       fail("[Backup::Job::${name}]: dbname is required with this database type")
     }
+    # Other databases allow specifying one but not the other
     if $username and !$password {
       fail("[Backup::Job::${name}]: Database password is required with username")
     }
-  }
 
-  # MongoDB
-  if member($_types, 'mongodb') {
     if $collections and (!is_string($collections) and !is_array($collections)) {
       fail("[Backup::Job::${name}]: Collections to backup for MongoDB must be a string or array if defined")
     }
     validate_bool($lock)
-  } # MongoDB
+  }
+
+  # MySQL
+  if member($_types, 'mysql') {
+    if $skip_tables and (!is_string($skip_tables) and !is_array($skip_tables)) {
+      fail("[Backup::Job::${name}]: Tables to skip in backup for MySQL must be a string or array if defined")
+    }
+  }
 
   # Storage
   if !member(['s3', 'local', 'ftp'], $storage_type) {
@@ -366,6 +374,19 @@ define backup::job (
       target  => "/etc/backup/models/${_name}.rb",
       content => template('backup/job/redis.erb'),
       order   => '12',
+    }
+  }
+  if member($_types, 'mysql') {
+    # Template uses
+    # - $dbname
+    # - $username
+    # - $password
+    # - $port
+    # - $skip_tables
+    concat::fragment { "${_name}_mysql":
+      target  => "/etc/backup/models/${_name}.rb",
+      content => template('backup/job/mysql.erb'),
+      order   => '13',
     }
   }
 
