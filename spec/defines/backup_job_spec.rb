@@ -1056,6 +1056,17 @@ describe 'backup::job', :types=> :define do
       } }
       it { should contain_cron('job1-backup').with(:command => '/usr/local/bin/backup perform --trigger job1 --config-file \'/etc/backup/config.rb\' --tmp-path /tmp') }
     end #set tmp-path
+
+    context 'set gem bin path' do
+      let(:params) { {
+        :types          => 'archive',
+        :add            => '/here',
+        :storage_type   => 'local',
+        :path           => '/backups',
+        :gem_bin_path   => '/usr/local/rvm/gems/ruby-2.2.1/bin'
+      } }
+      it { should contain_cron('job1-backup').with(:command => '/usr/local/rvm/gems/ruby-2.2.1/bin/backup perform --trigger job1 --config-file \'/etc/backup/config.rb\' --tmp-path ~/Backup/.tmp') }
+    end #set gem bin path
   end # cron entry
 
 end
