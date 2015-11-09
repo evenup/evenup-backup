@@ -13,6 +13,7 @@ define backup::job (
   $ensure            = 'present',
   $utilities         = undef,
   $tmp_path          = '~/Backup/.tmp',
+  $gem_bin_path      = '/usr/local/bin',
   $before_job        = undef,
   $after_job         = undef,
 
@@ -519,7 +520,7 @@ define backup::job (
 
   cron { "${name}-backup":
     ensure   => $ensure,
-    command  => "/usr/local/bin/backup perform --trigger ${_name} --config-file '/etc/backup/config.rb' --tmp-path ${tmp_path}",
+    command  => "${gem_bin_path}/backup perform --trigger ${_name} --config-file '/etc/backup/config.rb' --tmp-path ${tmp_path}",
     minute   => $minute,
     hour     => $hour,
     monthday => $monthday,
