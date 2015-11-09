@@ -1,3 +1,8 @@
+20151109 - v0.8.0
+  Add support for eu-central-1 (vvondra)
+  Support custom ruby bin path (vvondra)
+  Support S3 reduced redundancy (vvondra)
+  Support MySQL backup type (vvondra)
 20151030 - v0.7.1
   Fix before/after blocks
 20151030 - v0.7.0
