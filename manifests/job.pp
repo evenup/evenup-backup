@@ -42,10 +42,12 @@ define backup::job (
   $split_into        = $::backup::split_into,
   $path              = $::backup::path,
   # S3
-  $aws_access_key    = $::backup::aws_access_key,
-  $aws_secret_key    = $::backup::aws_secret_key,
-  $bucket            = $::backup::bucket,
-  $aws_region        = $::backup::aws_region,
+  $aws_access_key      = $::backup::aws_access_key,
+  $aws_secret_key      = $::backup::aws_secret_key,
+  $bucket              = $::backup::bucket,
+  $aws_region          = $::backup::aws_region,
+  $reduced_redundancy  = $::backup::reduced_redundancy,
+
   # Remote storage common
   $storage_username  = $::backup::storage_username,
   $storage_password  = $::backup::storage_password,
@@ -183,6 +185,8 @@ define backup::job (
 
   # S3
   if $storage_type == 's3' {
+    validate_bool($reduced_redundancy)
+
     if !$aws_access_key or !is_string($aws_access_key) {
       fail("[Backup::Job::${name}]: Parameter aws_access_key is required for S3 storage")
     }
